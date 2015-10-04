@@ -1,0 +1,23 @@
+{
+  "name": "star",
+  "private": true,
+  "dependencies": {
+    "react": "0.13.3",
+    "lodash": "~3.10.0"
+  },
+  "devDependencies": {
+    "browserify": "~11.2.0",
+    "gulp": "~3.9.0",
+    "gulp-cssshrink": "latest",
+    "gulp-notify": "^2.2.0",
+    "gulp-rename": "latest",
+    "gulp-sass": "latest",
+    "gulp-uglify": "*",
+    "gulp-util": "*",
+    "gulp-watch": "*",
+    "reactify": "*",
+    "vinyl-buffer": "*",
+    "vinyl-source-stream": "*",
+    "vinyl-transform": "0.0.1"
+  }
+}

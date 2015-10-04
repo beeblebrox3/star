@@ -2,6 +2,8 @@ var App = require("./app");
 
 App.Config = require("./config");
 
+require("./polyfill");
+
 // setup events manager
 var EventManager = require("./core/EventManager");
 App.EventManager = new EventManager();

@@ -2,12 +2,14 @@
   "name": "star",
   "private": true,
   "dependencies": {
-    "react": "0.13.3",
-    "lodash": "~3.10.0"
+    "director": "^1.2.8",
+    "lodash": "~3.10.0",
+    "react": "0.13.3"
   },
   "devDependencies": {
     "browserify": "~11.2.0",
     "gulp": "~3.9.0",
+    "gulp-concat": "^2.6.0",
     "gulp-cssshrink": "latest",
     "gulp-notify": "^2.2.0",
     "gulp-rename": "latest",

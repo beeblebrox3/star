@@ -8,6 +8,7 @@ var cssShrink = require("gulp-cssshrink");
 var rename = require("gulp-rename");
 var uglify = require("gulp-uglify");
 var buffer = require("vinyl-buffer");
+var concat = require('gulp-concat');
 var browsersync = require("browser-sync").create();
 
 var errorHandler = function (e) {
@@ -52,7 +53,7 @@ gulp.task("browserify", function () {
     .pipe(notify("bundle updated"));
 });
 
-gulp.task("css", function () {
+gulp.task("sass", function () {
     "use strict";
 
     return gulp.src([
@@ -61,9 +62,20 @@ gulp.task("css", function () {
     .pipe(sass())
     .on("error", errorHandler)
     // .pipe(cssShrink())
-    .pipe(rename("bundle.css"))
+    .pipe(rename("style.css"))
     .pipe(gulp.dest("./web/css"))
     .pipe(browsersync.stream());
+});
+
+gulp.task("css", ["sass"], function () {
+    "use strict";
+
+    gulp.src([
+        "web/libs/uikit/css/uikit.min.css",
+        "web/css/style.css"
+    ])
+    .pipe(concat('bundle.css'))
+    .pipe(gulp.dest("./web/css"));
 });
 
 gulp.task("default", ["browserify", "css", "browsersync"], function () {

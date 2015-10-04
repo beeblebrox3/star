@@ -14,11 +14,13 @@ App.ServicesContainer = new ServicesContainer();
 // libs
 App.libs.React = require("react/addons");
 App.libs._ = require("lodash");
+App.libs.Director = require("director");
 
 require("./helpers/index");
 require("./services/index");
 require("./components/index");
 
-require("./triggers");
+// require("./triggers");
+require("./routes");
 
 module.exports = App;

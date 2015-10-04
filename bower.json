@@ -1,6 +1,6 @@
 {
   "name": "star",
   "dependencies": {
-    "bootstrap": "3.3.5"
+    "uikit": "~2.22.0"
   }
 }

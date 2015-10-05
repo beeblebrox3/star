@@ -10,11 +10,13 @@ App.EventManager = new EventManager();
 
 var ServicesContainer = require("./core/ServicesContainer");
 App.ServicesContainer = new ServicesContainer();
+App.ServicesContainer.define("EventManager", EventManager);
 
 // libs
 App.libs.React = require("react/addons");
 App.libs._ = require("lodash");
 App.libs.Director = require("director");
+App.libs.Superagent = require("superagent");
 
 require("./helpers/index");
 require("./services/index");

@@ -4,7 +4,8 @@
   "dependencies": {
     "director": "^1.2.8",
     "lodash": "~3.10.0",
-    "react": "0.13.3"
+    "react": "0.13.3",
+    "superagent": "^1.4.0"
   },
   "devDependencies": {
     "browserify": "~11.2.0",

@@ -33,6 +33,7 @@ var router = new Router({
 });
 
 router.init();
+App.ServicesContainer.setInstance("ROUTER", router);
 
 if (window.location.hash === "") {
     window.location.hash = "/";

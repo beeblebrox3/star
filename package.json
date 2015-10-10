@@ -3,6 +3,7 @@
   "private": true,
   "dependencies": {
     "director": "^1.2.8",
+    "es5-shim": "^4.1.14",
     "lodash": "~3.10.0",
     "react": "0.13.3",
     "superagent": "^1.4.0"

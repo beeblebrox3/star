@@ -5,7 +5,9 @@ var React = App.libs.React;
 var router = new Router({
     "/": function () {
         React.render(
-            <App.components.Application>
+            <App.components.Application
+                pageTitle="Star"
+            >
                 <App.components.pages.Home />
             </App.components.Application>,
             document.body
@@ -13,7 +15,9 @@ var router = new Router({
     },
     "/foo": function () {
         React.render(
-            <App.components.Application>
+            <App.components.Application
+                pageTitle="Foo | Star"
+            >
                 <App.components.pages.Foo />
             </App.components.Application>,
             document.body
@@ -22,7 +26,9 @@ var router = new Router({
 }).configure({
     notfound: function () {
         React.render(
-            <App.components.Application>
+            <App.components.Application
+                pageTitle="Ops! | Star"
+            >
                 <h1>page not found :(</h1>
             </App.components.Application>,
             document.body

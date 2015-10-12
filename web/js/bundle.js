@@ -36341,12 +36341,14 @@ var Application = React.createClass({
         "use strict";
 
         return {
-            name: "appname"
+            pageTitle: "Home"
         };
     },
 
     render: function () {
         "use strict";
+        
+        document.title = this.props.pageTitle;
 
         return (
             React.createElement("div", {className: "uk-container uk-container-center uk-margin-top uk-margin-large-bottom"}, 
@@ -36449,12 +36451,11 @@ var Home = React.createClass({
         "use strict";
 
         return (
-            React.createElement("div", {className: "uk-grid"}, 
-                React.createElement("div", {className: "uk-width-medium-1-1"}, 
-                    React.createElement("div", {className: "uk-vertical-align-middle uk-width-1-2"}, 
-                        React.createElement("h1", {className: "uk-heading-large"}, "Star Framework"), 
-                        React.createElement("p", {className: "uk-text-large"}, "Welcome :)")
-                    )
+            React.createElement("div", {className: "uk-width-medium-1-2 uk-container-center"}, 
+                React.createElement("div", {className: "uk-align-center uk-text-center uk-margin-large-top"}, 
+
+                    React.createElement("h1", {className: "uk-heading-large"}, "Star Framework"), 
+                    React.createElement("p", {className: "uk-text-large"}, "Welcome :)")
                 )
             )
         );
@@ -36868,7 +36869,9 @@ var React = App.libs.React;
 var router = new Router({
     "/": function () {
         React.render(
-            React.createElement(App.components.Application, null, 
+            React.createElement(App.components.Application, {
+                pageTitle: "Star"
+            }, 
                 React.createElement(App.components.pages.Home, null)
             ),
             document.body
@@ -36876,7 +36879,9 @@ var router = new Router({
     },
     "/foo": function () {
         React.render(
-            React.createElement(App.components.Application, null, 
+            React.createElement(App.components.Application, {
+                pageTitle: "Foo | Star"
+            }, 
                 React.createElement(App.components.pages.Foo, null)
             ),
             document.body
@@ -36885,7 +36890,9 @@ var router = new Router({
 }).configure({
     notfound: function () {
         React.render(
-            React.createElement(App.components.Application, null, 
+            React.createElement(App.components.Application, {
+                pageTitle: "Ops! | Star"
+            }, 
                 React.createElement("h1", null, "page not found :(")
             ),
             document.body

@@ -8,12 +8,11 @@ var Home = React.createClass({
         "use strict";
 
         return (
-            <div className="uk-grid">
-                <div className="uk-width-medium-1-1">
-                    <div className="uk-vertical-align-middle uk-width-1-2">
-                        <h1 className="uk-heading-large">Star Framework</h1>
-                        <p className="uk-text-large">Welcome :)</p>
-                    </div>
+            <div className="uk-width-medium-1-2 uk-container-center">
+                <div className="uk-align-center uk-text-center uk-margin-large-top">
+
+                    <h1 className="uk-heading-large">Star Framework</h1>
+                    <p className="uk-text-large">Welcome :)</p>
                 </div>
             </div>
         );

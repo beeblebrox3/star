@@ -8,12 +8,14 @@ var Application = React.createClass({
         "use strict";
 
         return {
-            name: "appname"
+            pageTitle: "Home"
         };
     },
 
     render: function () {
         "use strict";
+        
+        document.title = this.props.pageTitle;
 
         return (
             <div className="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">

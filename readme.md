@@ -2,24 +2,6 @@
 
 > [Demo](http://star.luque.cc/)
 
-**Table of Contents**  *generated with [DocToc](http://doctoc.herokuapp.com/)*
-
-- [Star](#)
-	- [About](#)
-	- [Tools](#)
-	- [How the code is organized](#)
-		- [Namespaces](#)
-			- [libs](#)
-			- [helpers](#)
-			- [components](#)
-			- [services](#)
-		- [Files and directories](#)
-		- [Modules](#)
-			- [Config](#)
-		- [EventManager](#)
-		- [ServicesContainer](#)
-	- [Routes and pages](#)
-
 
 ## About
 This project is just a place for me to think about how  organize my front-end code. I'm not suggesting you to use, but you can - and I hope you do - ask questions or make suggestions ;)
@@ -232,6 +214,75 @@ By default, we have 3 registered services. **EventManager**, **ROUTER** and **AJ
 The **EventManager** is not the App.EventManager, but it's constructor. Some services can have it's own internal events handlers, like the `Request`. They can use a clean instance of EventManager to not mess with the application events.
 **ROUTER** is the instance of  [Director](https://github.com/flatiron/director) that I'm using for routes (more about it later).
 Finally, **AJAX** is a service that I built to simplify ajax requests. I was using jQuery, but wanna to try without it (more about it later).
+
+## AJAX
+jQuery was present on 99% of the projects that I worked on, so all my ajax stuff was built with it. This project don't. I'm using [Superagent](https://github.com/visionmedia/superagent). But I want to make much easy to use it with the services, so I built a wrapper to help.
+It's a registered service named `AJAX` (`App.ServicesContainer.get("AJAX")`).
+Let's see an example:
+
+```javascript
+var Request = App.ServicesContainer.get("AJAX");
+
+Request.onStart(function (req) {
+	// do stuff before every request made with this instance
+});
+
+Request.onStop(function (err, res, req) {
+	// do stuff after every request is completed.
+	// occurs before of onSuccess and onError
+});
+
+Request.onSuccess(function (res, req) {
+	// do stuff when any request is completed with success.
+	// occurs after onStop
+});
+
+Request.onError(function (err, res, req) {
+	// do stuff when any request fails.
+	// occurs after onStop
+});
+
+// make a POST request
+Request.send(
+	"post",
+	"http://foo/bar",
+	{name: "foo"},
+	function (res, req) {
+		// do stuff if success
+	},
+	function (err, res, req) {
+		// do stuff if fails
+	}
+);
+
+// make another POST request
+Request.make({
+	url: "http://foo/bar",
+    method: "post",
+    onStart: function (req) {
+	    // before make the request
+    },
+    onStop: function (err, res, req) {
+	    // after the request is completed
+    },
+    onSuccess: function (res, req) {
+		// if request is successful
+    },
+    onError: function (err, res, req) {
+	    // if request fails
+    },
+    headers: {
+	    "accept": "application/json"
+    },
+    data: {
+	    name: "George"
+    }
+});
+```
+
+> On all callbacks, the argument `req` is the request created with Superagent and you can interact with it over there.
+> This service is registered on `src/js/index.js`. I take the liberty to set the header `Accept` with `application/json` for you. You can get a clean instance from the service or just remove the lines that configure the onStart callback and you'll be fine :)
+
 
 ## Routes and pages
 I've started to work with SPA's not so long ago, so I'm still discovering how to build things. Before I used React Router, but didn't like it very much. Someone recommended Director one time and I'm trying to use it.

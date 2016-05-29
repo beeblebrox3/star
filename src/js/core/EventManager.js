@@ -20,7 +20,6 @@ var EventManager = function () {
             }
 
             map[eventName].push(fn);
-            console.log("subscribed to " + eventName);
         },
 
         subscribeMultiple: function (eventsNames, fn) {
@@ -40,10 +39,10 @@ var EventManager = function () {
             if (index !== -1) {
                 map[eventName].splice(index, 1);
             }
-            console.log("unsubscribed to " + eventName);
         },
 
         unsubscribeMultiple: function (eventsNames, fn) {
+            console.log()
             var i, length = eventsNames.length;
             for (i = 0; i < length; i++) {
                 this.unsubscribe(eventsNames[i], fn);
@@ -60,7 +59,10 @@ var EventManager = function () {
         },
 
         notify: function (eventName) {
+            console.log("fired " + eventName);
+
             if (!map.hasOwnProperty(eventName)) {
+                console.log("nobody listening " + eventName);
                 return;
             }
 
@@ -68,8 +70,6 @@ var EventManager = function () {
             map[eventName].forEach(function (fn) {
                 fn.apply(this, args);
             });
-
-            console.log("fired " + eventName);
         }
     };
 };

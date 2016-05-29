@@ -5,3 +5,4 @@ require("./base/index");
 require("./pages/index");
 
 App.components.Application = require("./Application");
+App.components.NotFound = require("./NotFound");

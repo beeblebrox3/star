@@ -10,7 +10,14 @@ var uglify = require("gulp-uglify");
 var buffer = require("vinyl-buffer");
 var concat = require('gulp-concat');
 var browsersync = require("browser-sync").create();
-
+var aliasify = require("aliasify");
+var aliasifyConfig = {
+    aliases: {
+        ".env.js": "./.env.js"
+    },
+    verbose: true
+};
+var environment = "dev";
 var errorHandler = function (e) {
     "use strict";
 
@@ -24,6 +31,7 @@ gulp.task("browsersync", function () {
 
     browsersync.init({
         server: "./web",
+        host: "0.0.0.0",
         open: false
     });
 
@@ -36,21 +44,28 @@ gulp.task("browsersync", function () {
 gulp.task("browserify", function () {
     "use strict";
 
-    return browserify({
+    var bundle = browserify({
         standalone: "App",
         paths: ["./src/js"],
-        debug: false
+        debug: false,
+        insertGlobalVars: true
     })
-    .transform(reactify)
-    .on("error", errorHandler)
-    .add("./src/js/bootstrap.js")
-    .bundle()
-    .on("error", errorHandler)
-    .pipe(source("bundle.js"))
-    .pipe(buffer())
-    // .pipe(uglify())
-    .pipe(gulp.dest("./web/js"))
-    .pipe(notify("bundle updated"));
+        .transform(reactify)
+        .transform(aliasify, aliasifyConfig)
+        .on("error", errorHandler)
+        .add("./src/js/bootstrap.js")
+        .bundle()
+        .on("error", errorHandler)
+        .pipe(source("bundle.js"))
+        .pipe(buffer());
+
+    if (environment === "prod") {
+        bundle.pipe(uglify());
+    }
+    bundle.pipe(gulp.dest("./web/js"))
+        .pipe(notify("bundle updated"));
+
+    return bundle;
 });
 
 gulp.task("sass", function () {
@@ -61,26 +76,42 @@ gulp.task("sass", function () {
     ])
     .pipe(sass())
     .on("error", errorHandler)
-    // .pipe(cssShrink())
-    .pipe(rename("style.css"))
-    .pipe(gulp.dest("./web/css"))
-    .pipe(browsersync.stream());
+    .pipe(rename("bundle.css"))
+    .pipe(gulp.dest("./web/css"));
 });
 
 gulp.task("css", ["sass"], function () {
     "use strict";
 
-    gulp.src([
+    var bundle = gulp.src([
         "web/libs/uikit/css/uikit.min.css",
-        "web/css/style.css"
+        "web/css/bundle.css"
     ])
-    .pipe(concat('bundle.css'))
-    .pipe(gulp.dest("./web/css"));
+    .pipe(concat('bundle.min.css'))
+
+    if (environment === "prod") {
+        bundle.pipe(cssShrink())
+    }
+
+    return bundle.pipe(gulp.dest("./web/css"))
+        .pipe(browsersync.stream());
 });
 
-gulp.task("default", ["browserify", "css", "browsersync"], function () {
+gulp.task("dev", ["browserify", "css", "browsersync"], function () {
     "use strict";
 
-    gulp.watch("src/js/**/*.js", ["browserify"]);
+    gulp.watch(["src/js/**/*.js", "src/js/**/*.jsx"], ["browserify"]);
     gulp.watch("src/css/**/*.scss", ["css"]);
+});
+
+gulp.task("default", ["browserify", "css"]);
+
+gulp.task("prod", function () {
+    "use strict";
+
+    aliasifyConfig.aliases[".env.js"] = "./.env.prod.js";
+    environment = "prod";
+    process.env.NODE_ENV = "production";
+
+    gulp.start("browserify", "css");
 });

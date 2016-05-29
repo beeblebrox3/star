@@ -25,3 +25,11 @@ App.helpers.array.sortByObjectKey = function (data, prop) {
         return response;
     });
 };
+
+App.helpers.array.filterBy = function (key, values, items) {
+    "use strict";
+
+    return items.filter(function (item) {
+        return values.indexOf(item[key]) > -1;
+    });
+};

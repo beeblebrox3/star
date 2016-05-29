@@ -1,4 +1,5 @@
 var App = require("app");
+var _ = require("lodash");
 
 App.helpers.object = {};
 
@@ -6,9 +7,10 @@ App.helpers.object = {};
  * Get element from obj by string path
  * @param  {string} path
  * @param  {Object} obj reference object. If not provided or invalid, window will be used
+ * @param {mixed} defaultValue value to return if key was not found. Default is null
  * @return {string|number|object|function|null}
  */
-App.helpers.object.getFlattened = function (path, obj) {
+App.helpers.object.getFlattened = function (path, obj, defaultValue) {
     "use strict";
 
     if (typeof path !== "string") {
@@ -22,17 +24,18 @@ App.helpers.object.getFlattened = function (path, obj) {
     path = path.split(".");
     var i,
         size = path.length,
-        response = obj;
+        response = obj,
+        defaultValuetoReturn = defaultValue !== undefined ? defaultValue : null;
 
     for (i = 0; i < size; i += 1) {
         if (response instanceof Object === false) {
-            return null;
+            return defaultValuetoReturn;
         }
 
         if (response.hasOwnProperty(path[i])) {
             response = response[path[i]];
         } else {
-            return null;
+            return defaultValuetoReturn;
         }
     }
 

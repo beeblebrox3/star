@@ -1,8 +1,12 @@
 var Config = require("./core/Config");
-
 var ConfigInstance = new Config();
-ConfigInstance.set("basepath", "http://localhost:3000/");
-ConfigInstance.set("language", "pt-br");
-ConfigInstance.set("debug", true);
+
+var env = require(".env.js");
+
+for (var config in env) {
+    if (env.hasOwnProperty(config)) {
+        ConfigInstance.set(config, env[config]);
+    }
+}
 
 module.exports = ConfigInstance;

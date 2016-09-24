@@ -1,54 +1,47 @@
-var App = require("app");
-
-var ServicesContainer = function () {
-    "use strict";
-
-    this.instances = {};
-    this.map = {};
-};
-
-ServicesContainer.prototype.define = function (serviceName, service, context) {
-    "use strict";
-
-    if (!context) {
-        context = App;
+class ServicesContainer {
+    constructor() {
+        this._instances = {};
+        this._map = {};
     }
 
-    if (typeof service === "string") {
-        service = App.helpers.object.getFlattened(service, context);
+    /**
+     * @param {String} serviceName
+     * @param {Class} service
+     */
+    define(serviceName, service) {
+        this._map[serviceName] = service;
     }
 
-    this.map[serviceName] = service;
-};
-
-ServicesContainer.prototype.setInstance = function (serviceName, instance) {
-    "use strict";
-
-    this.instances[serviceName] = instance;
-};
-
-/**
- * @param {string} serviceName
- */
-ServicesContainer.prototype.get = function (serviceName) {
-    "use strict";
-
-    if (this.instances.hasOwnProperty(serviceName)) {
-        return this.instances[serviceName];
+    /**
+     * @param {String} serviceName
+     * @param {Object} instance
+     */
+    setInstance(serviceName, instance) {
+        this._instances[serviceName] = instance;
     }
 
-    this.setInstance(serviceName, this.getNewInstance(serviceName));
-    return this.instances[serviceName];
-};
+    /**
+     * @param {String} serviceName
+     * @returns {Object}
+     */
+    get(serviceName) {
+        if (!this._instances.hasOwnProperty(serviceName)) {
+            this.setInstance(serviceName, this.getNewInstance(serviceName));
+        }
 
-ServicesContainer.prototype.getNewInstance = function (serviceName) {
-    "use strict";
-
-    if (!this.map.hasOwnProperty(serviceName)) {
-        throw "Service " + serviceName + " not found";
+        return this._instances[serviceName];
     }
 
-    return new this.map[serviceName]();
-};
+    /**
+     * @param {String} serviceName
+     */
+    getNewInstance(serviceName) {
+        if (!this._map.hasOwnProperty(serviceName)) {
+            throw new Error(`Service ${serviceName} not found`);
+        }
 
-module.exports = ServicesContainer;
+        return new this._map[serviceName]();
+    }
+}
+
+export default ServicesContainer;

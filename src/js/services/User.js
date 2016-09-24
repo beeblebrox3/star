@@ -1,15 +1,10 @@
-var App = require("app");
-var RestInterface = require("./RestInterface");
+import App from "app";
+import RestInterface from "./RestInterface";
 
-function User() {
-    "use strict";
+class User extends RestInterface {
+    constructor() {
+        super("User", App.Config.get("basepath") + "apiusers")
+    }
 }
 
-User.prototype = new RestInterface(
-    "User",
-    App.Config.get("basepath") + "apiusers"
-);
-
-User.prototype.constructor = User;
-
-module.exports = User;
+export default User;

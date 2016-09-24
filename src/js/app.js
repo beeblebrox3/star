@@ -1,8 +1,9 @@
-var App = window.App || {};
+let App = window.App || {};
 
-App.components = {};
-App.libs = {};
-App.helpers = {};
-App.services = {};
+App.components = App.components || {};
+App.libs = App.libs || {};
+App.helpers = App.helpers || {};
+App.services = App.services || {};
 
-module.exports = App;
+export default App;
+

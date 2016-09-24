@@ -1,15 +1,17 @@
 {
+    "extends": "eslint:recommended",
+    "parserOptions": {
+        "ecmaVersion": 2015,
+        "sourceType": "module"
+    },
     "ecmaFeatures": {
         "jsx": true
     },
     "env": {
-        "browser": true
+
     },
     "globals": {
-        "require": true,
-        "module": true,
-        "confirm": true,
-        "exports": true
+        "require": true
     },
     "rules": {
         "no-underscore-dangle": 0,
@@ -20,7 +22,6 @@
         "react/display-name": 1,
         "react/jsx-boolean-value": 1,
         "react/jsx-no-undef": 1,
-        "react/jsx-quotes": 1,
         "react/jsx-sort-prop-types": 0,
         "react/jsx-sort-props": 0,
         "react/jsx-uses-react": 1,

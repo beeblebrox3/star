@@ -1,4 +1,8 @@
-var App = require("app");
+import App from "app";
+import Request from "./ajax/Request";
+
+// application's services
+import User from "./User";
 
 // example:
 // constructor
@@ -10,7 +14,8 @@ var App = require("app");
 
 // Default services
 // interface to handle AJAX requests
-App.ServicesContainer.define("AJAX", require("./ajax/Request"));
+App.ServicesContainer.define("AJAX", Request);
+
 // configure AJAX to always ask for json
 // You can ask for a new instance do get rid of this behaviour :)
 App.ServicesContainer.get("AJAX").onStart(function (req) {
@@ -20,4 +25,4 @@ App.ServicesContainer.get("AJAX").onStart(function (req) {
 });
 
 // Example
-App.ServicesContainer.define("User", require("./User"));
+App.ServicesContainer.define("User", User);

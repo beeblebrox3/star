@@ -1,4 +1,4 @@
-var App = require("app");
+import App from "app";
 
 App.helpers.string = {};
 
@@ -15,20 +15,25 @@ App.helpers.string = {};
  * google.com
  * google
  * users/create
+ * /users/create
  *
- * @param url
- * @returns {*}
+ * @param {String} url
+ * @param {String} basePath basepath to be used, with protocol. If not provided, will use the default basepath, from config
+ * @returns {String}
  */
-App.helpers.string.resolveUrl = function (url) {
-    "use strict";
-
+App.helpers.string.resolveUrl = function (url, basePath = App.Config.get("basepath")) {
     if (url.indexOf("//") === -1) {
-        return App.Config.get("basepath") + url;
+        return basePath + url;
     }
 
     return url;
 };
 
+/**
+ * Makes string capitalized
+ * @param {String} string
+ * @returns {string}
+ */
 App.helpers.string.ucfirst = function (string) {
     "use strict";
 
@@ -36,16 +41,27 @@ App.helpers.string.ucfirst = function (string) {
     return string.charAt(0).toLocaleUpperCase() + string.substr(1);
 };
 
+/**
+ * @see App.helpers.string.ucfirst
+ */
+App.helpers.string.capitalize = App.helpers.string.ucfirst;
+
+/**
+ * Makes every word from string capitalized
+ * @param {String} string
+ * @returns {string}
+ */
 App.helpers.string.ucwords = function (string) {
     "use strict";
 
-    string = string.split(" ").map(function (word) {
-        return App.helpers.string.ucfirst(word);
-    });
-
-    return string.join(" ");
+    return string.split(" ").map(word => App.helpers.string.ucfirst(word)).join(" ");
 };
 
+/**
+ * @param text
+ * @param maxLength
+ * @returns {*}
+ */
 App.helpers.string.excerpt = function (text, maxLength) {
     "use strict";
 
@@ -58,10 +74,10 @@ App.helpers.string.excerpt = function (text, maxLength) {
     }
 
     if (text.length > maxLength) {
-        var exploded = text.split(" ");
-        var counter = 0;
-        var i = 0;
-        var response = [];
+        const exploded = text.split(" ");
+        let counter = 0;
+        let i = 0;
+        let response = [];
 
         for (i = 0; i < exploded.length; i++) {
             if (counter + exploded[i].length <= maxLength || i === 0) {

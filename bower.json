@@ -1,7 +1,0 @@
-{
-  "name": "star",
-  "dependencies": {
-    "uikit": "~2.22.0",
-    "react": "~0.14.0"
-  }
-}

@@ -1,30 +1,24 @@
-var Config = function () {
-    "use strict";
-
-    var configs = [];
-
-    /**
-     * Get value of a config
-     * @param  {string} configName
-     * @param  {mixed}  defaultValue defines what return if config doesn't exists
-     * @return {mixed}
-     */
-    this.get = function getConfig(configName, defaultValue) {
-        if (configs.hasOwnProperty(configName)) {
-            return configs[configName];
-        }
-
-        return defaultValue;
-    };
+class Config {
+    constructor() {
+        this._configs = [];
+    }
 
     /**
-     * Set value to a config
-     * @param {string} configName
-     * @param {string|object|number|undefined}  value
+     * @param {String} configName
+     * @param {*} value
      */
-    this.set = function setConfig(configName, value) {
-        configs[configName] = value;
-    };
-};
+    set(configName, value) {
+        this._configs[configName] = value;
+    }
 
-module.exports = Config;
+    /**
+     * @param {String} configName
+     * @param {*} defaultValue
+     * @returns {*}
+     */
+    get(configName, defaultValue = null) {
+        return this._configs[configName] || defaultValue;
+    }
+}
+
+export default Config;

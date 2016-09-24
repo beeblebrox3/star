@@ -14,6 +14,9 @@ The main tools here are:
  - [Gulp](http://gulpjs.com/);
  - [Browserify](http://browserify.org/).
 
+## Install
+@todo install -g babel-core
+
 ## How the code is organized
 ### Namespaces
 A good design principle is maintain a single global variable, so we have `App`.

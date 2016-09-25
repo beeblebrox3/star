@@ -1,12 +1,8 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Foo = React.createClass({
-    displayName: "pages.Foo",
-
-    render: function () {
-        "use strict";
-
+class Foo extends React.Component {
+    render() {
         return (
             <div className="uk-grid">
                 <div className="uk-width-medium-1-1">
@@ -15,6 +11,6 @@ var Foo = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = Foo;
+export default Foo;

@@ -113,11 +113,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	_app2.default.EventManager = _app2.default.ServicesContainer.get("EventManager");
 
 	__webpack_require__(189);
-	__webpack_require__(193);
+	__webpack_require__(194);
 	__webpack_require__(198);
-	// require("./routes/index");
-	//
-	// module.exports = App;
+	__webpack_require__(204);
 
 	exports.default = _app2.default;
 
@@ -41255,7 +41253,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	__webpack_require__(190);
 	__webpack_require__(191);
 	__webpack_require__(192);
-	__webpack_require__(197);
+	__webpack_require__(193);
 
 /***/ },
 /* 190 */
@@ -41543,11 +41541,126 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _Request = __webpack_require__(194);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_app2.default.helpers.date = {
+	    leadingZero: function leadingZero(num) {
+	        return ("0" + num).slice(-2);
+	    },
+
+	    /**
+	     * @param {Number} seconds
+	     * @param {Boolean} showSeconds
+	     * @returns {string}
+	     */
+	    beautifySeconds: function beautifySeconds(seconds) {
+	        var showSeconds = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
+	        var response = "";
+	        var theTime = {
+	            hours: 0,
+	            minutes: 0,
+	            seconds: 0
+	        };
+
+	        theTime.hours = ~~(seconds / 3600);
+	        theTime.minutes = ~~(seconds % 3600 / 60);
+	        theTime.seconds = seconds % 60;
+
+	        if (theTime.hours) {
+	            response += theTime.hours + "h";
+	            response += this.leadingZero(theTime.minutes) + "m";
+	            response += showSeconds ? this.leadingZero(theTime.seconds) + "s" : "";
+	        } else if (theTime.minutes) {
+	            response += this.leadingZero(theTime.minutes) + "m";
+	            response += this.leadingZero(theTime.seconds) + "s";
+	        } else if (showSeconds) {
+	            response += this.leadingZero(theTime.seconds) + "s";
+	        }
+
+	        return response;
+	    },
+
+	    /**
+	     * @param {Number} minutes
+	     * @returns {String}
+	     */
+	    beautifyMinutes: function beautifyMinutes(minutes) {
+	        return this.beautifySeconds(minutes * 60);
+	    },
+
+	    fromBeutyToSeconds: function fromBeutyToSeconds(theTime) {
+	        var response = 0;
+
+	        var hRE = /(\d+)h/;
+	        var mRE = /(\d+)m/;
+	        var sRE = /(\d+)s/;
+
+	        var hours = hRE.exec(theTime);
+	        var minutes = mRE.exec(theTime);
+	        var seconds = sRE.exec(theTime);
+
+	        if (hours) {
+	            response += parseInt(hours[1], 10) * 3600;
+	        }
+
+	        if (minutes) {
+	            response += parseInt(minutes[1], 10) * 60;
+	        }
+
+	        if (seconds) {
+	            response += parseInt(seconds[1], 10);
+	        }
+
+	        if (!response) {
+	            response += parseInt(theTime, 10);
+	        }
+
+	        return response;
+	    },
+
+	    daysBetween: function daysBetween(startDateString, endDateString) {
+	        var oneDay = 24 * 60 * 60 * 1000;
+	        var startDate = new Date(startDateString);
+	        var endDate = new Date(endDateString);
+
+	        return Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / oneDay));
+	    },
+
+	    curdate: function curdate() {
+	        return new Date().toISOString().substr(0, 10);
+	    },
+
+	    firstDayOfTheMonth: function firstDayOfTheMonth() {
+	        var today = new Date();
+	        return today.getFullYear() + "-" + (today.getMonth() + 1) + "-01";
+	    },
+
+	    lastDayOfTheMonth: function lastDayOfTheMonth(month, year) {
+	        var today = new Date();
+	        var useMonth = month ? month : today.getMonth() + 1;
+	        var useYear = year ? year : today.getFullYear();
+	        var lastDay = new Date(useYear, useMonth, 0);
+
+	        return useYear + "-" + this.leadingZero(useMonth) + "-" + this.leadingZero(lastDay.getDate());
+	    }
+	};
+
+/***/ },
+/* 194 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _Request = __webpack_require__(195);
 
 	var _Request2 = _interopRequireDefault(_Request);
 
-	var _User = __webpack_require__(195);
+	var _User = __webpack_require__(196);
 
 	var _User2 = _interopRequireDefault(_User);
 
@@ -41580,7 +41693,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	_app2.default.ServicesContainer.define("User", _User2.default);
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41804,7 +41917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Request;
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -41817,7 +41930,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var _app2 = _interopRequireDefault(_app);
 
-	var _RestInterface2 = __webpack_require__(196);
+	var _RestInterface2 = __webpack_require__(197);
 
 	var _RestInterface3 = _interopRequireDefault(_RestInterface2);
 
@@ -41844,7 +41957,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = User;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42014,7 +42127,407 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = RestInterface;
 
 /***/ },
-/* 197 */
+/* 198 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _Application = __webpack_require__(199);
+
+	var _Application2 = _interopRequireDefault(_Application);
+
+	var _NotFound = __webpack_require__(200);
+
+	var _NotFound2 = _interopRequireDefault(_NotFound);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// require("./mixins/index");
+	// require("./base/index");
+	__webpack_require__(201);
+
+	_app2.default.components.Application = _Application2.default;
+	_app2.default.components.NotFound = _NotFound2.default;
+
+/***/ },
+/* 199 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = _app2.default.libs.React;
+
+	var Application = function (_React$Component) {
+	    _inherits(Application, _React$Component);
+
+	    function Application() {
+	        _classCallCheck(this, Application);
+
+	        var _this = _possibleConstructorReturn(this, (Application.__proto__ || Object.getPrototypeOf(Application)).call(this));
+
+	        _this.displayName = "Application";
+	        return _this;
+	    }
+
+	    _createClass(Application, [{
+	        key: "render",
+	        value: function render() {
+	            document.title = this.props.pageTitle;
+
+	            return React.createElement(
+	                "div",
+	                null,
+	                React.createElement(
+	                    "nav",
+	                    null,
+	                    React.createElement(
+	                        "a",
+	                        { href: "/" },
+	                        "Star"
+	                    ),
+	                    React.createElement(
+	                        "ul",
+	                        null,
+	                        React.createElement(
+	                            "li",
+	                            null,
+	                            React.createElement(
+	                                "a",
+	                                { href: "/" },
+	                                "Home"
+	                            )
+	                        ),
+	                        React.createElement(
+	                            "li",
+	                            null,
+	                            React.createElement(
+	                                "a",
+	                                { href: "/foo" },
+	                                "Foo"
+	                            )
+	                        ),
+	                        React.createElement(
+	                            "li",
+	                            null,
+	                            React.createElement(
+	                                "a",
+	                                { href: "/x" },
+	                                "404"
+	                            )
+	                        )
+	                    )
+	                ),
+	                this.props.children
+	            );
+	        }
+	    }], [{
+	        key: "defaultProps",
+	        get: function get() {
+	            return {
+	                pageTitle: "Star"
+	            };
+	        }
+	    }]);
+
+	    return Application;
+	}(React.Component);
+
+	exports.default = Application;
+
+/***/ },
+/* 200 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = _app2.default.libs.React;
+
+	var NotFound = function (_React$Component) {
+	    _inherits(NotFound, _React$Component);
+
+	    function NotFound() {
+	        _classCallCheck(this, NotFound);
+
+	        var _this = _possibleConstructorReturn(this, (NotFound.__proto__ || Object.getPrototypeOf(NotFound)).call(this));
+
+	        _this.displayName = "Not found";
+	        return _this;
+	    }
+
+	    _createClass(NotFound, [{
+	        key: "render",
+	        value: function render() {
+	            document.title = this.props.pageTitle;
+
+	            return React.createElement(
+	                "p",
+	                null,
+	                "Are you lost?"
+	            );
+	        }
+	    }], [{
+	        key: "defaultProps",
+	        get: function get() {
+	            return {
+	                pageTitme: "Ops!"
+	            };
+	        }
+	    }]);
+
+	    return NotFound;
+	}(React.Component);
+
+	exports.default = NotFound;
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	var _Home = __webpack_require__(202);
+
+	var _Home2 = _interopRequireDefault(_Home);
+
+	var _Foo = __webpack_require__(203);
+
+	var _Foo2 = _interopRequireDefault(_Foo);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	_app2.default.components.pages = {};
+
+	_app2.default.components.pages.Home = _Home2.default;
+	_app2.default.components.pages.Foo = _Foo2.default;
+
+/***/ },
+/* 202 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = _app2.default.libs.React;
+
+	var Home = function (_React$Component) {
+	    _inherits(Home, _React$Component);
+
+	    function Home() {
+	        _classCallCheck(this, Home);
+
+	        var _this = _possibleConstructorReturn(this, (Home.__proto__ || Object.getPrototypeOf(Home)).call(this));
+
+	        _this.displayName = "pages.Home";
+	        return _this;
+	    }
+
+	    _createClass(Home, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement(
+	                "div",
+	                null,
+	                React.createElement(
+	                    "div",
+	                    null,
+	                    React.createElement(
+	                        "h1",
+	                        null,
+	                        "Star Framework"
+	                    ),
+	                    React.createElement(
+	                        "p",
+	                        null,
+	                        "Welcome :)"
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Home;
+	}(React.Component);
+
+	exports.default = Home;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = _app2.default.libs.React;
+
+	var Foo = function (_React$Component) {
+	    _inherits(Foo, _React$Component);
+
+	    function Foo() {
+	        _classCallCheck(this, Foo);
+
+	        return _possibleConstructorReturn(this, (Foo.__proto__ || Object.getPrototypeOf(Foo)).apply(this, arguments));
+	    }
+
+	    _createClass(Foo, [{
+	        key: "render",
+	        value: function render() {
+	            return React.createElement(
+	                "div",
+	                { className: "uk-grid" },
+	                React.createElement(
+	                    "div",
+	                    { className: "uk-width-medium-1-1" },
+	                    "foo"
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Foo;
+	}(React.Component);
+
+	exports.default = Foo;
+
+/***/ },
+/* 204 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _app = __webpack_require__(185);
+
+	var _app2 = _interopRequireDefault(_app);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Page = _app2.default.libs.Page;
+	var RDOM = _app2.default.libs.ReactDOM;
+	var React = _app2.default.libs.React;
+
+	var Router = {};
+	var DOMNode = document.querySelector("#react-root");
+
+	Router.setRoute = function (route) {
+	    "use strict";
+
+	    Page.redirect(route);
+	};
+
+	Router.renderPage = function (Page, context) {
+	    "use strict";
+
+	    RDOM.render(React.createElement(Page, _extends({}, context.params, { context: context })), DOMNode);
+	};
+
+	Router.renderPageWithLayout = function (Layout, Page, context) {
+	    "use strict";
+
+	    RDOM.render(React.createElement(
+	        Layout,
+	        null,
+	        React.createElement(Page, _extends({}, context.params, { context: context }))
+	    ), DOMNode);
+	};
+
+	_app2.default.ServicesContainer.setInstance("ROUTER", Router);
+	__webpack_require__(205);
+	__webpack_require__(206);
+
+	Page("*", Router.renderPageWithLayout.bind(null, _app2.default.components.Application, _app2.default.components.NotFound));
+
+	Page.start({
+	    click: true,
+	    hashbang: _app2.default.Config.get("environment") === "dev"
+	});
+
+/***/ },
+/* 205 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+/***/ },
+/* 206 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -42025,362 +42538,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	_app2.default.helpers.date = {
-	    leadingZero: function leadingZero(num) {
-	        return ("0" + num).slice(-2);
-	    },
+	var Page = _app2.default.libs.Page;
 
-	    /**
-	     * @param {Number} seconds
-	     * @param {Boolean} showSeconds
-	     * @returns {string}
-	     */
-	    beautifySeconds: function beautifySeconds(seconds) {
-	        var showSeconds = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+	var Router = _app2.default.ServicesContainer.get("ROUTER");
+	var defaultLayout = _app2.default.components.Application;
+	var Pages = _app2.default.components.pages;
 
-	        var response = "";
-	        var theTime = {
-	            hours: 0,
-	            minutes: 0,
-	            seconds: 0
-	        };
-
-	        theTime.hours = ~~(seconds / 3600);
-	        theTime.minutes = ~~(seconds % 3600 / 60);
-	        theTime.seconds = seconds % 60;
-
-	        if (theTime.hours) {
-	            response += theTime.hours + "h";
-	            response += this.leadingZero(theTime.minutes) + "m";
-	            response += showSeconds ? this.leadingZero(theTime.seconds) + "s" : "";
-	        } else if (theTime.minutes) {
-	            response += this.leadingZero(theTime.minutes) + "m";
-	            response += this.leadingZero(theTime.seconds) + "s";
-	        } else if (showSeconds) {
-	            response += this.leadingZero(theTime.seconds) + "s";
-	        }
-
-	        return response;
-	    },
-
-	    /**
-	     * @param {Number} minutes
-	     * @returns {String}
-	     */
-	    beautifyMinutes: function beautifyMinutes(minutes) {
-	        return this.beautifySeconds(minutes * 60);
-	    },
-
-	    fromBeutyToSeconds: function fromBeutyToSeconds(theTime) {
-	        var response = 0;
-
-	        var hRE = /(\d+)h/;
-	        var mRE = /(\d+)m/;
-	        var sRE = /(\d+)s/;
-
-	        var hours = hRE.exec(theTime);
-	        var minutes = mRE.exec(theTime);
-	        var seconds = sRE.exec(theTime);
-
-	        if (hours) {
-	            response += parseInt(hours[1], 10) * 3600;
-	        }
-
-	        if (minutes) {
-	            response += parseInt(minutes[1], 10) * 60;
-	        }
-
-	        if (seconds) {
-	            response += parseInt(seconds[1], 10);
-	        }
-
-	        if (!response) {
-	            response += parseInt(theTime, 10);
-	        }
-
-	        return response;
-	    },
-
-	    daysBetween: function daysBetween(startDateString, endDateString) {
-	        var oneDay = 24 * 60 * 60 * 1000;
-	        var startDate = new Date(startDateString);
-	        var endDate = new Date(endDateString);
-
-	        return Math.round(Math.abs((startDate.getTime() - endDate.getTime()) / oneDay));
-	    },
-
-	    curdate: function curdate() {
-	        return new Date().toISOString().substr(0, 10);
-	    },
-
-	    firstDayOfTheMonth: function firstDayOfTheMonth() {
-	        var today = new Date();
-	        return today.getFullYear() + "-" + (today.getMonth() + 1) + "-01";
-	    },
-
-	    lastDayOfTheMonth: function lastDayOfTheMonth(month, year) {
-	        var today = new Date();
-	        var useMonth = month ? month : today.getMonth() + 1;
-	        var useYear = year ? year : today.getFullYear();
-	        var lastDay = new Date(useYear, useMonth, 0);
-
-	        return useYear + "-" + this.leadingZero(useMonth) + "-" + this.leadingZero(lastDay.getDate());
-	    }
-	};
-
-/***/ },
-/* 198 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-
-	__webpack_require__(199);
-	__webpack_require__(200);
-	__webpack_require__(201);
-
-	App.components.Application = __webpack_require__(204);
-	App.components.NotFound = __webpack_require__(205);
-
-/***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-
-	App.components.mixins = {};
-
-	App.components.mixins.ValidableForm = {
-	    setInvalidFieldsFromErrors: function setInvalidFieldsFromErrors(data) {
-	        "use strict";
-
-	        this.setState({
-	            invalidFields: JSON.parse(data.response.responseText)
-	        });
-	    }
-	};
-
-	App.components.mixins.LinkedState = {
-	    linkState: function linkState(path) {
-	        "use strict";
-
-	        var state = App.libs._.cloneDeep(this.state);
-	        var self = this;
-
-	        var handleChange = function handleChange(value) {
-	            App.helpers.object.setFlattened(path, value, state);
-	            self.setState(state);
-	        };
-
-	        return {
-	            value: App.helpers.object.getFlattened(path, this.state),
-	            requestChange: handleChange
-	        };
-	    }
-	};
-
-/***/ },
-/* 200 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-
-	App.components.base = {};
-
-/***/ },
-/* 201 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-
-	App.components.pages = {};
-
-	App.components.pages.Home = __webpack_require__(202);
-	App.components.pages.Foo = __webpack_require__(203);
-
-/***/ },
-/* 202 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-	var React = App.libs.React;
-
-	var Home = React.createClass({
-	    displayName: "pages.Home",
-
-	    render: function render() {
-	        "use strict";
-
-	        return React.createElement(
-	            "div",
-	            { className: "uk-width-medium-1-2 uk-container-center" },
-	            React.createElement(
-	                "div",
-	                { className: "uk-align-center uk-text-center uk-margin-large-top" },
-	                React.createElement(
-	                    "h1",
-	                    { className: "uk-heading-large" },
-	                    "Star Framework"
-	                ),
-	                React.createElement(
-	                    "p",
-	                    { className: "uk-text-large" },
-	                    "Welcome :)"
-	                )
-	            )
-	        );
-	    }
-	});
-
-	module.exports = Home;
-
-/***/ },
-/* 203 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-	var React = App.libs.React;
-
-	var Foo = React.createClass({
-	    displayName: "pages.Foo",
-
-	    render: function render() {
-	        "use strict";
-
-	        return React.createElement(
-	            "div",
-	            { className: "uk-grid" },
-	            React.createElement(
-	                "div",
-	                { className: "uk-width-medium-1-1" },
-	                "foo"
-	            )
-	        );
-	    }
-	});
-
-	module.exports = Foo;
-
-/***/ },
-/* 204 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-	var React = App.libs.React;
-
-	var Application = React.createClass({
-	    displayName: "Application",
-
-	    getDefaultProps: function getDefaultProps() {
-	        "use strict";
-
-	        return {
-	            pageTitle: "Home"
-	        };
-	    },
-
-	    render: function render() {
-	        "use strict";
-
-	        document.title = this.props.pageTitle;
-
-	        return React.createElement(
-	            "div",
-	            { className: "uk-container uk-container-center uk-margin-top uk-margin-large-bottom" },
-	            React.createElement(
-	                "nav",
-	                { className: "uk-navbar" },
-	                React.createElement(
-	                    "a",
-	                    { className: "uk-navbar-brand", href: "/" },
-	                    "Star"
-	                ),
-	                React.createElement(
-	                    "ul",
-	                    { className: "uk-navbar-nav" },
-	                    React.createElement(
-	                        "li",
-	                        null,
-	                        React.createElement(
-	                            "a",
-	                            { href: "/" },
-	                            "Home"
-	                        )
-	                    ),
-	                    React.createElement(
-	                        "li",
-	                        null,
-	                        React.createElement(
-	                            "a",
-	                            { href: "/foo" },
-	                            "Foo"
-	                        )
-	                    ),
-	                    React.createElement(
-	                        "li",
-	                        null,
-	                        React.createElement(
-	                            "a",
-	                            { href: "/x" },
-	                            "404"
-	                        )
-	                    )
-	                )
-	            ),
-	            this.props.children
-	        );
-	    }
-	});
-
-	module.exports = Application;
-
-/***/ },
-/* 205 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var App = __webpack_require__(185);
-	var React = App.libs.React;
-
-	var Application = React.createClass({
-	    displayName: "Not Found",
-
-	    getDefaultProps: function getDefaultProps() {
-	        "use strict";
-
-	        return {
-	            pageTitle: "Ops!"
-	        };
-	    },
-
-	    render: function render() {
-	        "use strict";
-
-	        document.title = this.props.pageTitle;
-
-	        return React.createElement(
-	            "p",
-	            null,
-	            "Are you lost?"
-	        );
-	    }
-	});
-
-	module.exports = Application;
+	Page("/", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
+	Page("/foo", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
 
 /***/ }
 /******/ ])

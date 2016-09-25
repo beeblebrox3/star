@@ -1,27 +1,26 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Application = React.createClass({
-    displayName: "Application",
+class Application extends React.Component {
+    constructor() {
+        super();
+        this.displayName = "Application";
+    }
 
-    getDefaultProps: function () {
-        "use strict";
-
+    static get defaultProps() {
         return {
-            pageTitle: "Home"
-        };
-    },
+            pageTitle: "Star"
+        }
+    }
 
-    render: function () {
-        "use strict";
-        
+    render() {
         document.title = this.props.pageTitle;
 
         return (
-            <div className="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-                <nav className="uk-navbar">
-                    <a className="uk-navbar-brand" href="/">Star</a>
-                    <ul className="uk-navbar-nav">
+            <div>
+                <nav>
+                    <a href="/">Star</a>
+                    <ul>
                         <li><a href="/">Home</a></li>
                         <li><a href="/foo">Foo</a></li>
                         <li><a href="/x">404</a></li>
@@ -32,6 +31,6 @@ var Application = React.createClass({
             </div>
         );
     }
-});
+}
 
-module.exports = Application;
+export default Application;

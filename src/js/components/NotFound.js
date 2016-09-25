@@ -1,26 +1,25 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Application = React.createClass({
-    displayName: "Not Found",
+class NotFound extends React.Component {
+    constructor() {
+        super();
+        this.displayName = "Not found";
+    }
 
-    getDefaultProps: function () {
-        "use strict";
-
+    static get defaultProps() {
         return {
-            pageTitle: "Ops!"
-        };
-    },
+            pageTitme: "Ops!"
+        }
+    }
 
-    render: function () {
-        "use strict";
-
+    render() {
         document.title = this.props.pageTitle;
 
         return (
             <p>Are you lost?</p>
         );
     }
-});
+}
 
-module.exports = Application;
+export default NotFound;

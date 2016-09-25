@@ -26,8 +26,6 @@ App.EventManager = App.ServicesContainer.get("EventManager");
 require("./helpers/index");
 require("./services/index");
 require("./components/index");
-// require("./routes/index");
-//
-// module.exports = App;
+require("./routes/index");
 
 export default App;

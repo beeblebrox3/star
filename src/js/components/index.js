@@ -1,8 +1,11 @@
-var App = require("app");
+import App from "app";
+import Application from "./Application";
+import NotFound from "./NotFound";
 
-require("./mixins/index");
-require("./base/index");
+// require("./mixins/index");
+// require("./base/index");
 require("./pages/index");
 
-App.components.Application = require("./Application");
-App.components.NotFound = require("./NotFound");
+App.components.Application = Application;
+App.components.NotFound = NotFound;
+

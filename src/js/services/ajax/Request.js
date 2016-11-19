@@ -18,12 +18,18 @@ const _ = App.libs._;
  * @param {Object}  reqquest
  */
 
+/**
+ * Utility class to make XHR requests
+ * 
+ * @class Request
+ */
 class Request {
     constructor() {
         this.EM = EM;
     }
 
     /**
+     * Register a new event listener to be called when a new request is started
      * @param  {Function} parameters: req
      * @return {Request}
      */
@@ -35,6 +41,7 @@ class Request {
     }
 
     /**
+     * Register a new event listener to be called when an request is completed
      * @param  {requestCallback} cb
      * @return {Request}
      */
@@ -46,6 +53,7 @@ class Request {
     }
 
     /**
+     * Register a new event listener to be called when an request fails
      * @param  {requestCallback} cb
      * @return {Request}
      */
@@ -54,9 +62,10 @@ class Request {
 
         this.EM.subscribe("error", cb);
         return this;
-    };
+    }
 
     /**
+     * Register a new event listener to be called when an request succeeds
      * @param  {successfulRequestCallback} cb
      * @return {Request}
      */
@@ -65,7 +74,7 @@ class Request {
 
         this.EM.subscribe("success", cb);
         return this;
-    };
+    }
 
     /**
      * make a xhr

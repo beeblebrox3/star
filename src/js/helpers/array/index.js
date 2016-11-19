@@ -8,7 +8,7 @@ App.helpers.array = {};
  * @param {String} prop
  * @param {String} direction defines if sort should be asc or desc
  */
-App.helpers.array.sortByObjectKey = function (data, prop, direction = "asc") {
+App.helpers.array.sortByObjectKey = (data, prop, direction = "asc") => {
     if (["asc", "desc"].indexOf(direction) === -1) {
         throw new Error("Direction should be asc or desc");
     }
@@ -40,7 +40,7 @@ App.helpers.array.sortByObjectKey = function (data, prop, direction = "asc") {
  * @param values
  * @param items
  */
-App.helpers.array.filterBy = function (key, values, items) {
+App.helpers.array.filterBy = (key, values, items) => {
     "use strict";
 
     return items.filter(item => values.indexOf(item[key]) > -1);

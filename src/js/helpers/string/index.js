@@ -21,7 +21,7 @@ App.helpers.string = {};
  * @param {String} basePath basepath to be used, with protocol. If not provided, will use the default basepath, from config
  * @returns {String}
  */
-App.helpers.string.resolveUrl = function (url, basePath = App.Config.get("basepath")) {
+App.helpers.string.resolveUrl = (url, basePath = App.Config.get("basepath")) => {
     if (url.indexOf("//") === -1) {
         return basePath + url;
     }
@@ -34,7 +34,7 @@ App.helpers.string.resolveUrl = function (url, basePath = App.Config.get("basepa
  * @param {String} string
  * @returns {string}
  */
-App.helpers.string.ucfirst = function (string) {
+App.helpers.string.ucfirst = (string) => {
     "use strict";
 
     string = string.toLocaleLowerCase();
@@ -51,18 +51,17 @@ App.helpers.string.capitalize = App.helpers.string.ucfirst;
  * @param {String} string
  * @returns {string}
  */
-App.helpers.string.ucwords = function (string) {
-    "use strict";
-
-    return string.split(" ").map(word => App.helpers.string.ucfirst(word)).join(" ");
-};
+App.helpers.string.ucwords = (string) => string.split(" ").map(word => App.helpers.string.ucfirst(word)).join(" ");
 
 /**
+ * Will crop the text to fit the maxLength provided. Will try to not break any words
+ * and add "..." on the end of the string
+ * 
  * @param text
  * @param maxLength
- * @returns {*}
+ * @returns {String}
  */
-App.helpers.string.excerpt = function (text, maxLength) {
+App.helpers.string.excerpt = (text, maxLength) => {
     "use strict";
 
     if (maxLength !== parseInt(maxLength, 10) || maxLength < 1) {
@@ -99,10 +98,10 @@ App.helpers.string.excerpt = function (text, maxLength) {
  * Ref: http://stackoverflow.com/questions/105034/create-guid-uuid-in-javascript
  * @returns {String}
  */
-App.helpers.string.uuid = function () {
+App.helpers.string.uuid = () => {
     "use strict";
 
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
         var r = Math.random()*16|0, v = c === "x" ? r : (r&0x3|0x8);
         return v.toString(16);
     });

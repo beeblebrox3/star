@@ -4,12 +4,16 @@ App.helpers.object = {};
 
 /**
  * Get element from obj by string path
- * @param {string} path
+ * Example:
+ * Given the object let a = {a: {b: 1}}
+ * When you do getFlattened("a.b", a)
+ * Then you get the number 1.
+ * @param {string} path specify the key of the object you want
  * @param {Object} obj reference object
- * @param {*} defaultValue value to return if key was not found. Default is null
- * @return {string|number|object|function|null}
+ * @param {any} defaultValue value to return if key was not found. Default is null
+ * @return {any}
  */
-App.helpers.object.getFlattened = function (path, obj, defaultValue = null) {
+App.helpers.object.getFlattened = (path, obj, defaultValue = null) => {
     if (typeof path !== "string") {
         throw "path must be string";
     }
@@ -34,12 +38,18 @@ App.helpers.object.getFlattened = function (path, obj, defaultValue = null) {
 };
 
 /**
+ * @see getFlattened
+ * Similar to getFlattened, but it set the value instead of return it.
+ * Example:
+ * Given the object let b = {a: {b: 1}}
+ * When you do setFlattened("a.b", 2)
+ * Then you get {a: {b: 2}}
  * @param {String} path
  * @param {*} newValue
  * @param {Object} obj
  * @returns {*}
  */
-App.helpers.object.setFlattened = function (path, newValue, obj) {
+App.helpers.object.setFlattened = (path, newValue, obj) => {
     "use strict";
 
     const laps = path.split(".").length;
@@ -55,22 +65,16 @@ App.helpers.object.setFlattened = function (path, newValue, obj) {
 };
 
 /**
- * Get first key of an object
+ * Get first key of an object or null if it doesn't have keys
  * @param {Object} obj
  * @returns {*}
  */
-App.helpers.object.firstKey = function (obj) {
+App.helpers.object.firstKey = (obj) => {
     "use strict";
-
-    let i;
 
     if (obj instanceof Object === false) {
         throw "obj must be an Object";
     }
 
-    for (i in obj) {
-        if (obj.hasOwnProperty(i)) {
-            return i;
-        }
-    }
+    return Object.keys(obj)[0] || null;
 };

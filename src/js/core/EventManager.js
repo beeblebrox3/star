@@ -1,8 +1,22 @@
+/**
+ * Utility class to handle with events (subscribe, notify etc)
+ * 
+ * @class EventManager
+ */
 class EventManager {
     constructor() {
         this._map = {};
     }
 
+    /**
+     * Add an event listener
+     * 
+     * @param {String} eventName
+     * @param {Function} fn
+     * @returns {Function} the "unsubscriber". Call this function to unsubscribe this event (or use the unsubscribe method)
+     * 
+     * @memberOf EventManager
+     */
     subscribe(eventName, fn) {
         if (typeof eventName !== "string") {
             throw "eventName must be string";
@@ -17,16 +31,40 @@ class EventManager {
         }
 
         this._map[eventName].push(fn);
+        return this.unsubscribe.bind(this, eventName, fn);
     }
 
+    /**
+     * @see subscribe
+     * Add an event listener to multiple event aht the sabe time
+     * 
+     * @param {any} eventNames
+     * @param {any} fn
+     * 
+     * @memberOf EventManager
+     */
     subscribeMultiple(eventNames, fn) {
         let i, length = eventNames.length;
 
+        var unsubscribes = [];
         for (i = 0; i < length; i++) {
-            this.subscribe(eventNames[i], fn);
+            unsubscribes.push(this.subscribe(eventNames[i], fn));
+        }
+
+        return () => {
+            unsubscribes.map(unsubscribe => unsubscribe());
         }
     }
 
+    /**
+     * Removes an event listener from an event 
+     * 
+     * @param {string} eventName
+     * @param {Function} fn
+     * @returns
+     * 
+     * @memberOf EventManager
+     */
     unsubscribe(eventName, fn) {
         if (!this._map[eventName]) {
             return;
@@ -38,6 +76,15 @@ class EventManager {
         }
     }
 
+    /**
+     * @see unsubscribe
+     * Removes the event listener from multiple events
+     * 
+     * @param {string} eventNames
+     * @param {Function} fn
+     * 
+     * @memberOf EventManager
+     */
     unsubscribeMultiple(eventNames, fn) {
         let i, length = eventNames.length;
 
@@ -46,6 +93,13 @@ class EventManager {
         }
     }
 
+    /**
+     * Removes all event listeners from the given events
+     * 
+     * @param {String[]} eventNames
+     * 
+     * @memberOf EventManager
+     */
     unsubscribeAll(eventNames) {
         let i, length = eventNames.length;
         for (i = 0; i < length; i++) {
@@ -55,14 +109,21 @@ class EventManager {
         }
     }
 
+    /**
+     * Fire an event. Will send all arguments afeter eventName to the existent
+     * event listeners
+     * 
+     * @param {String} eventName
+     * @returns
+     * 
+     * @memberOf EventManager
+     */
     notify(eventName) {
-        console.log("fired " + eventName);
-
         if (!this._map.hasOwnProperty(eventName)) {
-            console.log("nobody listening " + eventName);
             return;
         }
 
+        // make an copy of the arguments to prevent someone to change it
         let args = Array.prototype.slice.call(arguments, 1);
         this._map[eventName].forEach(function (fn) {
             fn.apply(this, args);

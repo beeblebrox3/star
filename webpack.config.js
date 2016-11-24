@@ -1,7 +1,8 @@
-var path = require("path");
+/* eslint-env node */
+const path = require("path");
 
-var defaultEnvFile = ".env.js";
-var envFile = path.join(
+const defaultEnvFile = ".env.js";
+const envFile = path.join(
     __dirname,
     process.env.NODE_ENV ? ".env." + process.env.NODE_ENV + ".js" : defaultEnvFile
 );
@@ -9,10 +10,11 @@ var envFile = path.join(
 module.exports = {
     entry: "./src/js/bootstrap.js",
     output: {
-        path: "./web/js/",
+        path: "./web/js",
         filename: "bundle.js",
         library: "App",
-        libraryTarget: "umd"
+        libraryTarget: "umd",
+        publicPath: "js"
     },
     module: {
         loaders: [{

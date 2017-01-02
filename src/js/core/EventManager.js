@@ -1,77 +1,88 @@
-var App = require("app");
+function EventManager() {
+    this.map = {};
+};
 
-var EventManager = function () {
+EventManager.prototype.findIndexById = function (list, value) {
     "use strict";
-
-    var map = {};
-
-    return {
-        subscribe: function (eventName, fn) {
-            if (typeof eventName !== "string") {
-                throw "eventName must be string";
-            }
-
-            if (!eventName.length) {
-                throw "eventName cannot be empty";
-            }
-
-            if (!map.hasOwnProperty(eventName)) {
-                map[eventName] = [];
-            }
-
-            map[eventName].push(fn);
-        },
-
-        subscribeMultiple: function (eventsNames, fn) {
-            var i, length = eventsNames.length;
-
-            for (i = 0; i < length; i++) {
-                this.subscribe(eventsNames[i], fn);
-            }
-        },
-
-        unsubscribe: function (eventName, fn) {
-            if (!map.hasOwnProperty(eventName)) {
-                return;
-            }
-
-            var index = map[eventName].indexOf(fn);
-            if (index !== -1) {
-                map[eventName].splice(index, 1);
-            }
-        },
-
-        unsubscribeMultiple: function (eventsNames, fn) {
-            console.log()
-            var i, length = eventsNames.length;
-            for (i = 0; i < length; i++) {
-                this.unsubscribe(eventsNames[i], fn);
-            }
-        },
-
-        unsubscribeAll: function (eventsNames) {
-            var i, length = eventsNames.length;
-            for (i = 0; i < length; i++) {
-                if (map.hasOwnProperty(eventsNames[i])) {
-                    delete (map[eventsNames[i]]);
-                }
-            }
-        },
-
-        notify: function (eventName) {
-            console.log("fired " + eventName);
-
-            if (!map.hasOwnProperty(eventName)) {
-                console.log("nobody listening " + eventName);
-                return;
-            }
-
-            var args = Array.prototype.slice.call(arguments, 1);
-            map[eventName].forEach(function (fn) {
-                fn.apply(this, args);
-            });
+    for (var i = 0, len = list.length; i < len; i += 1) {
+        if (list[i]["id"] == value) {
+            return +i;
         }
-    };
+    }
+    return null;
+};
+
+EventManager.prototype.assign = function (event, fn) {
+    "use strict";
+    if (typeof event !== "string") {
+        throw "The event name must be string";
+    }
+
+    if (!event.length) {
+        throw "The event name cannot be empty";
+    }
+
+    if (!this.map.hasOwnProperty(event)) {
+        this.map[event] = [];
+    }
+    var id = 0;
+    if (this.map[event].length > 0) {
+        id = this.map[event][this.map[event].length - 1].id + 1;
+    }
+    this.map[event].push({
+        id: id,
+        fn: fn
+    });
+    return id;
+};
+
+EventManager.prototype.subscribe = function (events, fn) {
+    "use strict";
+    var unsubs = {};
+    var id = null;
+    if (Array.isArray(events)) {
+        for (var i = 0, len = events.length; i < len; i += 1) {
+            id = this.assign(events[i], fn);
+            if (unsubs[events[i]] === undefined) {
+                unsubs[events[i]] = [];
+            }
+            unsubs[events[i]].push(id);
+        }
+    } else {
+        id = this.assign(events, fn);
+        if (unsubs[events] === undefined) {
+            unsubs[events] = [];
+        }
+        unsubs[events].push(id);
+    }
+    return this.unsubscribe.bind(this, unsubs);
+};
+
+EventManager.prototype.unsubscribe = function (events) {
+    "use strict";
+    var index = null;
+    for (var ev in events) {
+        for (var i = 0, len = events[ev].length; i < len; i += 1) {
+            index = this.findIndexById(this.map[ev], events[ev][i]);
+            if (index !== null) {
+                this.map[ev].splice(index, 1);
+            }
+        }
+    }
+};
+
+EventManager.prototype.notify = function (event) {
+    "use strict";
+    console.log("fired " + event);
+
+    if (!this.map.hasOwnProperty(event) || this.map[event].length === 0) {
+        console.log("Nobody listening " + event);
+        return;
+    }
+    var args = Array.prototype.slice.call(arguments, 1);
+    this.map[event].forEach(function (sub) {
+        sub.fn.apply(this, args);
+    });
 };
 
 module.exports = EventManager;

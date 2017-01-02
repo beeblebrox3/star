@@ -22,8 +22,9 @@ var Application = React.createClass({
                 <nav className="uk-navbar">
                     <a className="uk-navbar-brand" href="/">Star</a>
                     <ul className="uk-navbar-nav">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/foo">Foo</a></li>
+                        <li><a href={App.routes.home}>Home</a></li>
+                        <li><a href={App.routes.foo}>Foo</a></li>
+                        <li><a href={App.routes.em}>Event Manager</a></li>
                         <li><a href="/x">404</a></li>
                     </ul>
                 </nav>

@@ -33,6 +33,7 @@ Router.renderPageWithLayout = function (Layout, Page, context) {
 };
 
 App.ServicesContainer.setInstance("ROUTER", Router);
+require("./routeNames");
 require("./middlewares");
 require("./applicationRoutes");
 

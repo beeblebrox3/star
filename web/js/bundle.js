@@ -40091,7 +40091,7 @@ require("./routes/index");
 
 module.exports = App;
 
-},{"./app":189,"./components/index":194,"./config":200,"./core/EventManager":202,"./core/ServicesContainer":203,"./helpers/index":205,"./routes/index":209,"./services/index":215,"lodash":27,"page":29,"react":183,"react-dom":32,"superagent":185}],191:[function(require,module,exports){
+},{"./app":189,"./components/index":194,"./config":200,"./core/EventManager":202,"./core/ServicesContainer":203,"./helpers/index":205,"./routes/index":209,"./services/index":214,"lodash":27,"page":29,"react":183,"react-dom":32,"superagent":185}],191:[function(require,module,exports){
 var App = require("app");
 var React = App.libs.React;
 
@@ -40116,9 +40116,9 @@ var Application = React.createClass({
                 React.createElement("nav", {className: "uk-navbar"}, 
                     React.createElement("a", {className: "uk-navbar-brand", href: "/"}, "Star"), 
                     React.createElement("ul", {className: "uk-navbar-nav"}, 
-                        React.createElement("li", null, React.createElement("a", {href: App.routes.home}, "Home")), 
-                        React.createElement("li", null, React.createElement("a", {href: App.routes.foo}, "Foo")), 
-                        React.createElement("li", null, React.createElement("a", {href: App.routes.em}, "Event Manager")), 
+                        React.createElement("li", null, React.createElement("a", {href: "/home"}, "Home")), 
+                        React.createElement("li", null, React.createElement("a", {href: "/foo"}, "Foo")), 
+                        React.createElement("li", null, React.createElement("a", {href: "/handling-events"}, "Handling Events")), 
                         React.createElement("li", null, React.createElement("a", {href: "/x"}, "404"))
                     )
                 ), 
@@ -40212,10 +40212,32 @@ App.components.mixins.LinkedState = {
 },{"app":189}],196:[function(require,module,exports){
 var App = require("app");
 var React = App.libs.React;
+
+var Foo = React.createClass({
+    displayName: "pages.Foo",
+
+    render: function () {
+        "use strict";
+
+        return (
+            React.createElement("div", {className: "uk-grid"}, 
+                React.createElement("div", {className: "uk-width-medium-1-1"}, 
+                    "foo"
+                )
+            )
+        );
+    }
+});
+
+module.exports = Foo;
+
+},{"app":189}],197:[function(require,module,exports){
+var App = require("app");
+var React = App.libs.React;
 var EM = App.EventManager;
 
-var EMPage = React.createClass({
-    displayName: "pages.EMPage",
+var HandlingEvents = React.createClass({
+    displayName: "pages.HandlingEvents",
     getInitialState: function() {
         return {
             text: "Hey, i will update in 2 seconds (Open the console)"
@@ -40268,29 +40290,7 @@ var EMPage = React.createClass({
     }
 });
 
-module.exports = EMPage;
-
-},{"app":189}],197:[function(require,module,exports){
-var App = require("app");
-var React = App.libs.React;
-
-var Foo = React.createClass({
-    displayName: "pages.Foo",
-
-    render: function () {
-        "use strict";
-
-        return (
-            React.createElement("div", {className: "uk-grid"}, 
-                React.createElement("div", {className: "uk-width-medium-1-1"}, 
-                    "foo"
-                )
-            )
-        );
-    }
-});
-
-module.exports = Foo;
+module.exports = HandlingEvents;
 
 },{"app":189}],198:[function(require,module,exports){
 var App = require("app");
@@ -40323,9 +40323,9 @@ App.components.pages = {};
 
 App.components.pages.Home = require("./Home");
 App.components.pages.Foo = require("./Foo");
-App.components.pages.Em = require("./Em");
+App.components.pages.HandlingEvents = require("./HandlingEvents");
 
-},{"./Em":196,"./Foo":197,"./Home":198,"app":189}],200:[function(require,module,exports){
+},{"./Foo":196,"./HandlingEvents":197,"./Home":198,"app":189}],200:[function(require,module,exports){
 var Config = require("./core/Config");
 var ConfigInstance = new Config();
 
@@ -40372,91 +40372,50 @@ var Config = function () {
 module.exports = Config;
 
 },{}],202:[function(require,module,exports){
-function EventManager() {
-    this.map = {};
-};
-
-EventManager.prototype.findIndexById = function (list, value) {
+var EventManager = function () {
     "use strict";
-    for (var i = 0, len = list.length; i < len; i += 1) {
-        if (list[i]["id"] == value) {
-            return +i;
-        }
-    }
-    return null;
-};
 
-EventManager.prototype.assign = function (event, fn) {
-    "use strict";
-    if (typeof event !== "string") {
-        throw "The event name must be string";
-    }
-
-    if (!event.length) {
-        throw "The event name cannot be empty";
-    }
-
-    if (!this.map.hasOwnProperty(event)) {
-        this.map[event] = [];
-    }
-    var id = 0;
-    if (this.map[event].length > 0) {
-        id = this.map[event][this.map[event].length - 1].id + 1;
-    }
-    this.map[event].push({
-        id: id,
-        fn: fn
-    });
-    return id;
-};
-
-EventManager.prototype.subscribe = function (events, fn) {
-    "use strict";
-    var unsubs = {};
-    var id = null;
-    if (Array.isArray(events)) {
-        for (var i = 0, len = events.length; i < len; i += 1) {
-            id = this.assign(events[i], fn);
-            if (unsubs[events[i]] === undefined) {
-                unsubs[events[i]] = [];
+    var map = {};
+    return {
+        assign: function (event, fn) {
+            if (!map.hasOwnProperty(event)) {
+                map[event] = [];
             }
-            unsubs[events[i]].push(id);
-        }
-    } else {
-        id = this.assign(events, fn);
-        if (unsubs[events] === undefined) {
-            unsubs[events] = [];
-        }
-        unsubs[events].push(id);
-    }
-    return this.unsubscribe.bind(this, unsubs);
-};
-
-EventManager.prototype.unsubscribe = function (events) {
-    "use strict";
-    var index = null;
-    for (var ev in events) {
-        for (var i = 0, len = events[ev].length; i < len; i += 1) {
-            index = this.findIndexById(this.map[ev], events[ev][i]);
-            if (index !== null) {
-                this.map[ev].splice(index, 1);
+            map[event].push(fn);
+            return this.unassign.bind(this, event, fn);
+        },
+        subscribe: function (events, fn) {
+            events = Array.isArray(events) ? events : [events];
+            var self = this;
+            var unsubscriptions = events.map(function (ev) {
+                return self.assign(ev, fn);
+            });
+            return this.unsubscribe.bind(this, unsubscriptions);
+        },
+        unassign: function (event, fn) {
+            let index = map[event].indexOf(fn);
+            if (index > -1) {
+                map[event].splice(index, 1);
             }
+        },
+        unsubscribe: function (unsubscriptions) {
+            unsubscriptions.map(function (unassign) {
+                unassign();
+            });
+        },
+        notify: function (event) {
+            console.log("fired " + event);
+            if (!map.hasOwnProperty(event) || map[event].length === 0) {
+                console.log("Nobody listening " + event);
+                return;
+            }
+
+            var args = Array.prototype.slice.call(arguments, 1);
+            map[event].map(function (fn) {
+                fn.apply(this, args);
+            });
         }
-    }
-};
-
-EventManager.prototype.notify = function (event) {
-    "use strict";
-    console.log("fired " + event);
-
-    if (!this.map.hasOwnProperty(event) || this.map[event].length === 0) {
-        console.log("Nobody listening " + event);
-        return;
-    }
-    var args = Array.prototype.slice.call(arguments, 1);
-    this.map[event].forEach(function (sub) {
-        sub.fn.apply(this, args);
-    });
+    };
 };
 
 module.exports = EventManager;
@@ -40748,9 +40707,9 @@ var Router = App.ServicesContainer.get("ROUTER");
 var defaultLayout = App.components.Application;
 var Pages = App.components.pages;
 
-Page(App.routes.home, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
-Page(App.routes.foo, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
-Page(App.routes.em, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Em));
+Page("/home", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
+Page("/foo", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
+Page("/handling-events", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.HandlingEvents));
 
 },{"app":189}],209:[function(require,module,exports){
 var App = require("app");
@@ -40788,7 +40747,6 @@ Router.renderPageWithLayout = function (Layout, Page, context) {
 };
 
 App.ServicesContainer.setInstance("ROUTER", Router);
-require("./routeNames");
 require("./middlewares");
 require("./applicationRoutes");
 
@@ -40799,18 +40757,9 @@ Page.start({
     hashbang: App.Config.get("environment") === "dev"
 });
 
-},{"./applicationRoutes":208,"./middlewares":210,"./routeNames":211,"app":189,"react":183,"react-dom":32}],210:[function(require,module,exports){
+},{"./applicationRoutes":208,"./middlewares":210,"app":189,"react":183,"react-dom":32}],210:[function(require,module,exports){
 
 },{}],211:[function(require,module,exports){
-var App = require("app");
-
-App.routes = {
-    home: "/",
-    foo: "/foo",
-    em: "/event-manager",
-};
-
-},{"app":189}],212:[function(require,module,exports){
 var App = require("app");
 var AJAX = App.ServicesContainer.get("AJAX");
 var EM = App.EventManager;
@@ -40961,7 +40910,7 @@ RestInterface.prototype.destroy = function (data, onSuccess, onError) {
 
 module.exports = RestInterface;
 
-},{"app":189}],213:[function(require,module,exports){
+},{"app":189}],212:[function(require,module,exports){
 var App = require("app");
 var RestInterface = require("./RestInterface");
 
@@ -40978,7 +40927,7 @@ User.prototype.constructor = User;
 
 module.exports = User;
 
-},{"./RestInterface":212,"app":189}],214:[function(require,module,exports){
+},{"./RestInterface":211,"app":189}],213:[function(require,module,exports){
 var App = require("app");
 var sa = App.libs.Superagent;
 var EM = App.ServicesContainer.getNewInstance("EventManager");
@@ -41155,7 +41104,7 @@ Request.prototype.make = function (config) {
 
 module.exports = Request;
 
-},{"app":189}],215:[function(require,module,exports){
+},{"app":189}],214:[function(require,module,exports){
 var App = require("app");
 
 // example:
@@ -41180,5 +41129,5 @@ App.ServicesContainer.get("AJAX").onStart(function (req) {
 // Example
 App.ServicesContainer.define("User", require("./User"));
 
-},{"./User":213,"./ajax/Request":214,"app":189}]},{},[190])(190)
+},{"./User":212,"./ajax/Request":213,"app":189}]},{},[190])(190)
 });

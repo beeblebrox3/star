@@ -2,8 +2,8 @@ var App = require("app");
 var React = App.libs.React;
 var EM = App.EventManager;
 
-var EMPage = React.createClass({
-    displayName: "pages.EMPage",
+var HandlingEvents = React.createClass({
+    displayName: "pages.HandlingEvents",
     getInitialState: function() {
         return {
             text: "Hey, i will update in 2 seconds (Open the console)"
@@ -56,4 +56,4 @@ var EMPage = React.createClass({
     }
 });
 
-module.exports = EMPage;
+module.exports = HandlingEvents;

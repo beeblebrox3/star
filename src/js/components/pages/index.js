@@ -4,4 +4,4 @@ App.components.pages = {};
 
 App.components.pages.Home = require("./Home");
 App.components.pages.Foo = require("./Foo");
-App.components.pages.Em = require("./Em");
+App.components.pages.HandlingEvents = require("./HandlingEvents");

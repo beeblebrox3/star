@@ -5,6 +5,6 @@ var Router = App.ServicesContainer.get("ROUTER");
 var defaultLayout = App.components.Application;
 var Pages = App.components.pages;
 
-Page(App.routes.home, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
-Page(App.routes.foo, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
-Page(App.routes.em, Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Em));
+Page("/home", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
+Page("/foo", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
+Page("/handling-events", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.HandlingEvents));

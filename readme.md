@@ -5,7 +5,8 @@
 Dev:
 `webpack --progress --colors --watch`
 
-
+Devserver:
+`npm run dev`
 
 
 ## About

@@ -1,1 +1,48 @@
-// code
+body {
+    padding: 1em;
+    margin: 0;
+    font-family: "Sans serif";
+    text-align: center;
+    color: #444;
+}
+
+.container {
+    max-width: 90%;
+}
+
+nav {
+    width: 90%;
+    margin: auto;
+    background: #eee;
+    text-align: left;
+    line-height: 1.2em;
+
+    a {
+        display: inline-block;
+        padding: 0.8em;
+        font-size: 1.2em;
+        text-decoration: none;
+        color: #333;
+        transition: all ease-in-out .2s;
+
+        &:hover {
+            background: #ddd;
+            color: black;
+        }
+    }
+
+    ul {
+        display: inline-block;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            display: inline-block;
+
+            a {
+                font-size: .9em;
+            }
+        }
+    }
+}

@@ -1,16 +1,16 @@
 import App from "app";
 const React = App.libs.React;
 
-class Foo extends React.Component {
-    render() {
+export default React.createClass({
+    displayName: "Foo",
+
+    render: function () {
         return (
-            <div className="uk-grid">
-                <div className="uk-width-medium-1-1">
-                    foo
-                </div>
+            <div className="container">
+                <h1>Foo</h1>
+
+                <p>This is an example page!</p>
             </div>
         );
     }
-}
-
-export default Foo;
+});

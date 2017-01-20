@@ -1,25 +1,16 @@
 import App from "app";
 const React = App.libs.React;
 
-class NotFound extends React.Component {
-    constructor() {
-        super();
-        this.displayName = "Not found";
-    }
+export default React.createClass({
+    displayName: "Application",
 
-    static get defaultProps() {
-        return {
-            pageTitme: "Ops!"
-        }
-    }
-
-    render() {
-        document.title = this.props.pageTitle;
-
+    render: function () {
         return (
-            <p>Are you lost?</p>
+            <div className="container">
+                <h1>Ops! Page not found!</h1>
+
+                <p>Are you lost?</p>
+            </div>
         );
     }
-}
-
-export default NotFound;
+});

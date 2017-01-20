@@ -1,13 +1,10 @@
 import App from "app";
 const React = App.libs.React;
 
-class Home extends React.Component {
-    constructor() {
-        super();
-        this.displayName = "pages.Home";
-    }
+export default React.createClass({
+    displayName: "Home",
 
-    render() {
+    render: function () {
         return (
             <div>
                 <div>
@@ -17,6 +14,4 @@ class Home extends React.Component {
             </div>
         );
     }
-}
-
-export default Home;
+});

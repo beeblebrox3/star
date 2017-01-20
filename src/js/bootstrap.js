@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
+
 import _ from "lodash";
 import Superagent from "superagent";
 import Page from "page";
@@ -27,5 +28,7 @@ require("./helpers/index");
 require("./services/index");
 require("./components/index");
 require("./routes/index");
+
+require("../css/main.scss");
 
 export default App;

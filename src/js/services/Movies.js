@@ -2,7 +2,7 @@ import App from "app";
 
 function Movies() {
     this.serviceName = "Movies";
-    this.basepath = "http://www.omdbapi.com/";
+    this.basepath = "//www.omdbapi.com/";
 
     this.Request = App.ServicesContainer.get("AJAX");
     this.EM = App.EventManager;

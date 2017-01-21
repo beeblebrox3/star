@@ -8,17 +8,21 @@ export default React.createClass({
 
     getDefaultProps: function () {
         return {
-            results: null
+            results: null,
+            searching: false
         };
     },
 
     render: function () {
+        if (this.props.searching) {
+            return <p>searching...</p>
+        }
         if (this.props.results === null) {
-            return <p>search something</p>;
+            return <p>search something!</p>;
         }
         
         if (!this.props.results.length) {
-            return <p>no results...</p>;
+            return <p>no results :(</p>;
         }
 
         return (

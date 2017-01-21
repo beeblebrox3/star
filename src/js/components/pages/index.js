@@ -1,7 +1,7 @@
 import App from "app";
 import Home from "./Home";
 import Foo from "./Foo";
-import Movies from "./Movies/Movies";
+import Movies from "./Movies/Page";
 
 App.components.pages = {};
 

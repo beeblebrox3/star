@@ -9,14 +9,22 @@ export default React.createClass({
 
     getInitialState: function () {
         return {
-            results: null
+            results: null,
+            searching: false
         }
     },
 
     search: function () {
-        Movies.search(this.refs.search.value, (res) => {
-            this.setState({results: res});
-        });
+        let term = this.refs.search.value;
+        if (!term.length) {
+            this.setState({results: null});
+            return;
+        }
+
+        this.setState(
+            {searching: true, results: []},
+            Movies.search(term, (res) => this.setState({results: res, searching: false}))
+        );
     },
   
     render: function () {
@@ -33,7 +41,7 @@ export default React.createClass({
                     />
                 </form>
 
-                <Results results={ this.state.results } />
+                <Results results={ this.state.results } searching={ this.state.searching } />
             </div>
         );
     }

@@ -2,7 +2,6 @@ import App from "app";
 
 const sa = App.libs.Superagent;
 const EM = App.ServicesContainer.getNewInstance("EventManager");
-const _ = App.libs._;
 
 /**
  * @callback requestCallback
@@ -143,7 +142,7 @@ class Request {
             data: {}
         };
 
-        let options = _.extend(defaultOptions, config);
+        let options = Object.assign({}, defaultOptions, config);
 
         if (options.method === "delete") {
             options.method = "del";
@@ -157,9 +156,7 @@ class Request {
         }
 
         // headers
-        _.forEach(options.headers, function (value, key) {
-            req.set(key, value);
-        });
+        Object.keys(options.headers).map((header) => req.set(header, options.headers[header]));
 
         req.end((err, res) => {
             this.EM.notify("stop", err, res, req);

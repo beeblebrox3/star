@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import _ from "lodash";
+import debounce from "debounce";
 import Superagent from "superagent";
 import Page from "page";
 import ServicesContainer from "./core/ServicesContainer";
@@ -12,7 +12,7 @@ import Config from "./config";
 
 App.libs.React = React;
 App.libs.ReactDOM = ReactDOM;
-App.libs._ = _;
+App.libs.debounce = debounce;
 App.libs.Superagent = Superagent;
 App.libs.Page = Page;
 

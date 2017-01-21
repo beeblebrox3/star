@@ -80,7 +80,9 @@ class RestInterface {
             id = this._extractId(data);
         }
 
-        const payload = _.merge(data, {_method: "PUT"});
+        let payload = data;
+        payload._method = "PUT";
+
         this.Request.send(
             "post",
             this.basepath + "/" + id,
@@ -115,7 +117,9 @@ class RestInterface {
             id = this._extractId(data);
         }
 
-        const payload = _.merge(data, {_method: "DELETE"});
+        let payload = data;
+        payload._method = "DELETE";
+
         this.Request.send(
             "post",
             this.basepath + "/" + id,

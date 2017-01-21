@@ -17,7 +17,7 @@ export default React.createClass({
     search: function () {
         let term = this.refs.search.value;
         if (!term.length) {
-            this.setState({results: null});
+            this.setState({results: null, searching: false});
             return;
         }
 
@@ -35,7 +35,7 @@ export default React.createClass({
                 <form action="" className="movies-search-form">
                     <input type="search"
                         placeholder="Search movies or series by name"
-                        onChange={ App.libs._.debounce(this.search, 500) }
+                        onChange={ App.libs.debounce(this.search, 500) }
                         ref="search"
                         autoFocus
                     />

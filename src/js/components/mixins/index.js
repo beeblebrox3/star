@@ -17,7 +17,7 @@ App.components.mixins.LinkedState = {
     linkState: function (path) {
         "use strict";
 
-        var state = App.libs._.cloneDeep(this.state);
+        var state = Object.assign({}, this.state);
         var self = this;
 
         var handleChange = function (value) {

@@ -1,7 +1,7 @@
 {
   "name": "star",
   "dependencies": {
-    "lodash": "^4.13.1",
+    "debounce": "^1.0.0",
     "page": "^1.7.1",
     "react": "^15.1.0",
     "react-dom": "^15.1.0",
@@ -17,6 +17,7 @@
     "eslint": "^3.6.0",
     "eslint-plugin-react": "^6.3.0",
     "extract-text-webpack-plugin": "^1.0.1",
+    "jest": "^18.1.0",
     "node-sass": "^4.3.0",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.13.1",
@@ -24,7 +25,8 @@
     "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
-    "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
+    "test": "jest --config .jest-config.json",
+    "test-watch": "jest --config .jest-config.json --watch",
     "dev": "./node_modules/.bin/webpack-dev-server --inline --content-base web/",
     "prod": "env NODE_ENV=production ./node_modules/.bin/webpack --optimize-minimize --optimize-dedupe --progress --color"
   }

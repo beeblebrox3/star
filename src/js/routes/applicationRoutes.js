@@ -7,3 +7,4 @@ const Pages = App.components.pages;
 
 Page("/", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
 Page("/foo", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
+Page("/movies", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Movies));

@@ -13,6 +13,7 @@ export default React.createClass({
                         <ul>
                             <li><a href="/">Home</a></li>
                             <li><a href="/foo">Foo</a></li>
+                            <li><a href="/movies">Movies</a></li>
                             <li><a href="/x">404</a></li>
                         </ul>
                     </div>

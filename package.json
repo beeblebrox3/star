@@ -26,6 +26,6 @@
   "scripts": {
     "test": "./node_modules/.bin/karma start --single-run --browsers PhantomJS",
     "dev": "./node_modules/.bin/webpack-dev-server --inline --content-base web/",
-    "prod": "./node_modules/.bin/webpack --optimize-minimize --optimize-dedupe"
+    "prod": "env NODE_ENV=production ./node_modules/.bin/webpack --optimize-minimize --optimize-dedupe --progress --color"
   }
 }

@@ -3,6 +3,7 @@ import Request from "./ajax/Request";
 
 // application's services
 import User from "./User";
+import Movies from "./Movies";
 
 // example:
 // constructor
@@ -26,3 +27,4 @@ App.ServicesContainer.get("AJAX").onStart(function (req) {
 
 // Example
 App.ServicesContainer.define("User", User);
+App.ServicesContainer.define("Movies", Movies);

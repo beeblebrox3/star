@@ -54,7 +54,7 @@ test("Test excerpt", () => {
             3: "This...",
             4: "This...",
             5: "This...",
-            7: "This is..."
+            7: "This is a..."
         },
     };
 

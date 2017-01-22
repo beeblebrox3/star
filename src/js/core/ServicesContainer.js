@@ -27,6 +27,14 @@ class ServicesContainer {
     }
 
     /**
+     * Same as define
+     * @see ServicesContainer.define
+     */
+    register(serviceName, service) {
+        this.define(serviceName, service);
+    }
+
+    /**
      * Register an instance of a service. If you only set the instance but not
      * the constructor (with the define method) this service will be like an singleton.
      * Nobody will be able to create an new instance of the service via ServicesContainer

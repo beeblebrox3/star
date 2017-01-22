@@ -64,8 +64,13 @@ export default {
      * @returns {String}
      */
     excerpt: function (text, maxLength) {
-        if (maxLength !== parseInt(maxLength, 10) || maxLength < 1) {
-            throw "maxLength must me an integer greater than 0";
+        if (isNaN(maxLength)) {
+            throw new Error("maxLength should be an integer");
+        }
+
+        maxLength = parseInt(maxLength, 10);
+        if (maxLength < 1) {
+            throw new Error("maxLength must be greater than 0");
         }
 
         if (typeof text !== "string") {

@@ -1,11 +1,9 @@
-import App from "app";
-
-App.helpers.date = {
+export default {
     /**
      * @param {String|Integer} num add a leading 0 to help format dates and times
      * @returns {String}
      */
-    leadingZero(num) {
+    leadingZero: function (num) {
         return `0${num}`.slice(-2);
     },
 
@@ -21,7 +19,7 @@ App.helpers.date = {
      * @param {Boolean} showSeconds
      * @returns {string}
      */
-    beautifySeconds(seconds, showSeconds = true) {
+    beautifySeconds: function (seconds, showSeconds = true) {
         let response = "";
         let theTime = {
             hours: 0,
@@ -39,7 +37,7 @@ App.helpers.date = {
             response += showSeconds ? `${this.leadingZero(theTime.seconds)}s` : "";
         } else if (theTime.minutes) {
             response += `${this.leadingZero(theTime.minutes)}m`;
-            response += `${this.leadingZero(theTime.seconds)}s`;
+            response += showSeconds ? `${this.leadingZero(theTime.seconds)}s` : "";
         } else if (showSeconds) {
             response += `${this.leadingZero(theTime.seconds)}s`;
         }
@@ -49,12 +47,14 @@ App.helpers.date = {
 
     /**
      * @see beautifySeconds
-     * Works the same way as beautifySeconds, but receibe an amount of minutes
+     * Works the same way as beautifySeconds, but receive an amount of minutes
      * @param {Number} minutes
      * @param {Boolean} showSeconds
      * @returns {String}
      */
-    beautifyMinutes: (minutes, showSeconds = true) => this.beautifySeconds(minutes * 60, showSeconds),
+    beautifyMinutes: function (minutes, showSeconds = true) {
+        return this.beautifySeconds(minutes * 60, showSeconds);
+    },
 
     
     /**
@@ -64,7 +64,7 @@ App.helpers.date = {
      * @param {String} theTime
      * @returns {Number}
      */
-    fromBeutyToSeconds(theTime) {
+    fromBeutyToSeconds: function (theTime) {
         let response = 0;
 
         const hRE = /(\d+)h/;
@@ -103,7 +103,7 @@ App.helpers.date = {
      * @param {String} endDateString
      * @returns {Number}
      */
-    daysBetween(startDateString, endDateString) {
+    daysBetween: function (startDateString, endDateString) {
         const oneDay = 24 * 60 * 60 * 1000;
         const startDate = new Date(startDateString);
         const endDate = new Date(endDateString);

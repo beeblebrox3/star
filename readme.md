@@ -3,11 +3,21 @@
 > [Demo](http://star.luque.cc/)
 
 Dev:
-`webpack --progress --colors --watch`
+
+```shell
+webpack --progress --colors --watch
+```
 
 Devserver:
-`npm run dev`
+```shell
+npm run dev
+```
 
+Production build:
+
+```shell
+npm run prod
+```
 
 ## About
 This project is just a place for me to think about how  organize my front-end code. I'm not suggesting you to use, but you can - and I hope you do - ask questions or make suggestions ;)

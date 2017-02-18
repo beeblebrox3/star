@@ -29,7 +29,7 @@ class Request {
 
     /**
      * Register a new event listener to be called when a new request is started
-     * @param  {Function} parameters: req
+     * @param  {requestCallback} cb
      * @return {Request}
      */
     onStart(cb) {

@@ -1,8 +1,8 @@
 # Star
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/quality-score.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=es2015)
-[![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=es2015)
-[![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/es2015)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/master)
 
 > [Demo](https://es2015.star.luque.cc/)
 

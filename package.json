@@ -20,6 +20,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "flow-bin": "^0.38.0",
     "jest": "^18.1.0",
+    "jsdoc": "^3.4.3",
     "mockdate": "^2.0.1",
     "node-sass": "^4.3.0",
     "sass-loader": "^4.1.1",
@@ -31,6 +32,7 @@
     "test": "jest --config .jest-config.json",
     "test-watch": "jest --config .jest-config.json --watch",
     "dev": "./node_modules/.bin/webpack-dev-server --inline --content-base web/",
-    "prod": "env NODE_ENV=production ./node_modules/.bin/webpack --optimize-minimize --optimize-dedupe --progress --color"
+    "prod": "env NODE_ENV=production ./node_modules/.bin/webpack --optimize-minimize --optimize-dedupe --progress --color",
+    "jsdocs": "./node_modules/jsdoc/jsdoc.js ./src -r -d docs"
   }
 }

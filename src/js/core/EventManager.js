@@ -11,8 +11,8 @@ class EventManager {
     /**
      * Add an event listener
      * 
-     * @param {String} eventName
-     * @param {Function} fn
+     * @param {String} eventName Event's name
+     * @param {Function} fn Handler
      * @returns {Function} the "unsubscriber". Call this function to unsubscribe this event (or use the unsubscribe method)
      * 
      * @memberOf EventManager
@@ -38,8 +38,10 @@ class EventManager {
      * @see subscribe
      * Add an event listener to multiple event aht the sabe time
      * 
-     * @param {any} eventNames
-     * @param {any} fn
+     * @param {String[]} eventNames Event's names
+     * @param {any} fn Handler
+     * @return {Function[]} Unsubscribers for all events
+     * @see EventManager.subscribe
      * 
      * @memberOf EventManager
      */
@@ -59,9 +61,8 @@ class EventManager {
     /**
      * Removes an event listener from an event 
      * 
-     * @param {string} eventName
-     * @param {Function} fn
-     * @returns
+     * @param {string} eventName Event's name
+     * @param {Function} fn Handler to remove
      * 
      * @memberOf EventManager
      */
@@ -80,7 +81,7 @@ class EventManager {
      * @see unsubscribe
      * Removes the event listener from multiple events
      * 
-     * @param {string} eventNames
+     * @param {String[]} eventNames Event's names
      * @param {Function} fn
      * 
      * @memberOf EventManager
@@ -110,11 +111,10 @@ class EventManager {
     }
 
     /**
-     * Fire an event. Will send all arguments afeter eventName to the existent
+     * Trigger an event. Will send all arguments after eventName to the existent
      * event listeners
      * 
-     * @param {String} eventName
-     * @returns
+     * @param {String} eventName Event's name
      * 
      * @memberOf EventManager
      */

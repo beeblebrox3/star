@@ -10,8 +10,8 @@ class Config {
 
     /**
      * Set a new or update an existing configuration
-     * @param {String} configName
-     * @param {*} value
+     * @param {String} configName Config name
+     * @param {*} value Config value
      */
     set(configName, value) {
         this._configs[configName] = value;
@@ -19,8 +19,9 @@ class Config {
 
     /**
      * Get the value of the configuration or the default value
-     * @param {String} configName
-     * @param {*} defaultValue
+     * 
+     * @param {String} configName Config name
+     * @param {*} defaultValue Value to return if config doesn't exists
      * @returns {*}
      */
     get(configName, defaultValue = null) {

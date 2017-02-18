@@ -77,7 +77,7 @@ class Request {
 
     /**
      * make a xhr
-     * @param  {String} method    get|post|put|delete|del
+     * @param  {String} method get|post|put|delete|del
      * @param  {String} url
      * @param  {Object} data
      * @param  {successfulRequestCallback} onSuccess function to be called if the request succeeds
@@ -119,14 +119,14 @@ class Request {
     /**
      * make a xhr with more options
      * @param  {Object} config
-     * @param  {String} config.url
-     * @param  {String} config.method get|post|put|del|delete
-     * @param  {Function} config.onStart function to call before send the resquest
-     * @param  {requestCallback} config.onStop
-     * @param  {successfulRequestCallback} config.onSuccess
-     * @param  {requestCallback} config.onError
-     * @param  {Object} config.headers
-     * @param  {Object} config.data
+     * @param  {String} config.url URL to make the request
+     * @param  {String} config.method The method. One of: get, post, put, del, delete
+     * @param  {Function} config.onStart Callback called before send the resquest
+     * @param  {requestCallback} config.onStop Callback called after complete the request
+     * @param  {successfulRequestCallback} config.onSuccess Callback for successful request. Called after onStop
+     * @param  {requestCallback} config.onError Callback for unsuccessful request. Called after onStop
+     * @param  {Object} config.headers Option headers. Example: {accept: "application/json"}
+     * @param  {Object} config.data Data to send to the server
      */
     make(config) {
         "use strict";

@@ -1,5 +1,9 @@
 # Star
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/quality-score.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=es2015)
+[![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=es2015)
+[![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=es2015)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/es2015)
+
 > [Demo](https://es2015.star.luque.cc/)
 
 ## About

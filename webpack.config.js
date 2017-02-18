@@ -1,6 +1,6 @@
 /* eslint-env node */
 const path = require("path");
-const webpack = require('webpack');
+const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 const environment = process.env.NODE_ENV;
@@ -34,6 +34,14 @@ if (PROD) {
     );
     plugins.push(
         new ExtractTextPlugin("../css/bundle.css")
+    );
+
+    plugins.push(
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        })
     );
     loaders[1].loader = ExtractTextPlugin.extract("style", "css!sass");
 } else {

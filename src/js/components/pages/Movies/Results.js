@@ -1,6 +1,7 @@
 import App from "app";
 import Result from "./Result";
 
+/** @type React */
 const React = App.libs.React;
 
 export default React.createClass({
@@ -38,4 +39,4 @@ export default React.createClass({
             </div>
         );
     }
-})
+});

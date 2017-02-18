@@ -1,125 +1,146 @@
-var App = require("app");
+export default {
+    /**
+     * @param {String|Integer} num add a leading 0 to help format dates and times
+     * @returns {String}
+     */
+    leadingZero: function (num) {
+        return `0${num}`.slice(-2);
+    },
 
-function leadingZero(num) {
-    "use strict";
+    /**
+     * Receive a number of seconds and return an string representing the amount of
+     * hours on the format: 00h00m00s
+     * Examples:
+     * beautifySeconds(60, false) => 01m
+     * beautifyMinutes(120, false) => 02m
+     * beautifyMinutes(3900, false) => 1h05m
+     * beautifyMinutes(3900, true) => 1h05m00s
+     * @param {Number} seconds
+     * @param {Boolean} showSeconds
+     * @returns {string}
+     */
+    beautifySeconds: function (seconds, showSeconds = true) {
+        let response = "";
+        let theTime = {
+            hours: 0,
+            minutes: 0,
+            seconds: 0
+        };
 
-    return ("0" + num).slice(-2);
-}
+        theTime.hours = ~~(seconds / 3600);
+        theTime.minutes = ~~((seconds % 3600) / 60);
+        theTime.seconds = seconds % 60;
 
-function beautifySeconds(seconds, showSeconds) {
-    "use strict";
+        if (theTime.hours) {
+            response += `${theTime.hours}h`;
+            response += `${this.leadingZero(theTime.minutes)}m`;
+            response += showSeconds ? `${this.leadingZero(theTime.seconds)}s` : "";
+        } else if (theTime.minutes) {
+            response += `${this.leadingZero(theTime.minutes)}m`;
+            response += showSeconds ? `${this.leadingZero(theTime.seconds)}s` : "";
+        } else if (showSeconds) {
+            response += `${this.leadingZero(theTime.seconds)}s`;
+        }
 
-    var show = showSeconds !== undefined ? showSeconds : true;
-    var response = "";
-    var theTime = {
-        hours: 0,
-        minutes: 0,
-        seconds: 0
-    };
+        return response;
+    },
 
-    theTime.hours = ~~(seconds / 3600);
-    theTime.minutes = ~~((seconds % 3600) / 60);
-    theTime.seconds = seconds % 60;
+    /**
+     * @see beautifySeconds
+     * Works the same way as beautifySeconds, but receive an amount of minutes
+     * @param {Number} minutes
+     * @param {Boolean} showSeconds
+     * @returns {String}
+     */
+    beautifyMinutes: function (minutes, showSeconds = true) {
+        return this.beautifySeconds(minutes * 60, showSeconds);
+    },
 
-    if (theTime.hours) {
-        response += theTime.hours + "h";
-        response += leadingZero(theTime.minutes) + "m";
-        response += show ? (leadingZero(theTime.seconds) + "s") : "";
-    } else if (theTime.minutes) {
-        response += theTime.minutes + "m";
-        response += leadingZero(theTime.seconds) + "s";
-    } else if (show) {
-        response += theTime.seconds + "s";
+    
+    /**
+     * Receives an duration with the format 00h00m00s and returns the amount 
+     * of seconds. The inverse of beautifySeconds
+     * 
+     * @param {String} theTime
+     * @returns {Number}
+     */
+    fromBeutyToSeconds: function (theTime) {
+        let response = 0;
+
+        const hRE = /(\d+)h/;
+        const mRE = /(\d+)m/;
+        const sRE = /(\d+)s/;
+
+        let hours = hRE.exec(theTime);
+        let minutes = mRE.exec(theTime);
+        let seconds = sRE.exec(theTime);
+
+        if (hours) {
+            response += parseInt(hours[1], 10) * 3600;
+        }
+
+        if (minutes) {
+            response += parseInt(minutes[1], 10) * 60;
+        }
+
+        if (seconds) {
+            response += parseInt(seconds[1], 10);
+        }
+
+        if (!response) {
+            response += parseInt(theTime, 10);
+        }
+
+        return response;
+    },
+
+    
+    /**
+     * Receive two dates and returns the amount of days between them
+     * Dates on the format supported by the Date constructor
+     * 
+     * @param {String} startDateString
+     * @param {String} endDateString
+     * @returns {Number}
+     */
+    daysBetween: function (startDateString, endDateString) {
+        const oneDay = 24 * 60 * 60 * 1000;
+        const startDate = new Date(startDateString);
+        const endDate = new Date(endDateString);
+
+        return Math.round(
+            Math.abs((startDate.getTime() - endDate.getTime()) / oneDay)
+        );
+    },
+
+    /**
+     * Returns the current date on the format: yyyy-mm-dd
+     * @returns {String}
+     */
+    curdate: () => new Date().toISOString().substr(0, 10),
+
+    /**
+     * Returns the first day of the current month on the format: yyyy-dd-mm
+     * @returns {String}
+     */
+    firstDayOfTheMonth: function () {
+        const today = new Date();
+        return `${today.getFullYear()}-${today.getMonth() + 1}-01`;
+    },
+
+    /**
+     * Returns the last day of the month on the format: yyyy-mm-dd
+     * It accepts an optional month and year to get the last day of an particular month
+     * @param {String} month
+     * @param {String} year
+     * @returns {String}
+     */
+    lastDayOfTheMonth: function (month, year) {
+        const today = new Date();
+        const useMonth = month ? month : today.getMonth() + 1;
+        const useYear = year ? year : today.getFullYear();
+        const lastDay = new Date(useYear, useMonth, 0);
+
+        return `${useYear}-${this.leadingZero(useMonth)}-${this.leadingZero(lastDay.getDate())}`;
     }
-
-    return response;
-}
-
-function beautifyMinutes(minutes) {
-    "use strict";
-
-    var response = beautifySeconds(minutes * 60);
-    return response;
-}
-
-function fromBeutyToSeconds(date) {
-    "use strict";
-
-    var response = 0;
-
-    var hRE = /(\d+)h/;
-    var mRE = /(\d+)m/;
-    var sRE = /(\d+)s/;
-
-    var hours = hRE.exec(date);
-    var minutes = mRE.exec(date);
-    var seconds = sRE.exec(date);
-
-    if (hours) {
-        response += parseInt(hours[1], 10) * 3600;
-    }
-
-    if (minutes) {
-        response += parseInt(minutes[1], 10) * 60;
-    }
-
-    if (seconds) {
-        response += parseInt(seconds[1], 10);
-    }
-
-    if (!response) {
-        response += parseInt(date, 10);
-    }
-
-    return response;
-}
-
-function daysBetween(startDateString, endDateString) {
-    "use strict";
-
-    var oneDay = 24 * 60 * 60 * 1000;
-    var startDate = new Date(startDateString);
-    var endDate = new Date(endDateString);
-
-    return Math.round(
-        Math.abs((startDate.getTime() - endDate.getTime()) / oneDay)
-    );
-}
-
-function curdate () {
-    "use strict";
-
-    return new Date().toISOString().substr(0, 10);
-}
-
-function firstDayOfTheMonth () {
-    "use strict";
-
-    var today = new Date();
-    var useMonth = month ? month : today.getMonth() + 1;
-    var useYear = year ? year : today.getFullYear();
-
-    return [useYear, leadingZero(useMonth), "01"].join("-");
-}
-
-function lastDayOfTheMonth () {
-    "use strict";
-
-    var today = new Date();
-    var useMonth = month ? month : today.getMonth() + 1;
-    var useYear = year ? year : today.getFullYear();
-    var lastDay = new Date(useYear, useMonth, 0);
-
-    return [useYear, leadingZero(useMonth), leadingZero(lastDay.getDate())].join("-");
-}
-
-App.helpers.date = {
-    leadingZero: leadingZero,
-    beautifyMinutes: beautifyMinutes,
-    beautifySeconds: beautifySeconds,
-    fromBeutyToSeconds: fromBeutyToSeconds,
-    daysBetween: daysBetween,
-    curdate: curdate,
-    firstDayOfTheMonth: firstDayOfTheMonth,
-    lastDayOfTheMonth: lastDayOfTheMonth
 };

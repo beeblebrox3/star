@@ -1,77 +1,134 @@
-var App = require("app");
+/**
+ * Utility class to handle with events (subscribe, notify etc)
+ * 
+ * @class EventManager
+ */
+class EventManager {
+    constructor() {
+        this._map = {};
+    }
 
-var EventManager = function () {
-    "use strict";
-
-    var map = {};
-
-    return {
-        subscribe: function (eventName, fn) {
-            if (typeof eventName !== "string") {
-                throw "eventName must be string";
-            }
-
-            if (!eventName.length) {
-                throw "eventName cannot be empty";
-            }
-
-            if (!map.hasOwnProperty(eventName)) {
-                map[eventName] = [];
-            }
-
-            map[eventName].push(fn);
-        },
-
-        subscribeMultiple: function (eventsNames, fn) {
-            var i, length = eventsNames.length;
-
-            for (i = 0; i < length; i++) {
-                this.subscribe(eventsNames[i], fn);
-            }
-        },
-
-        unsubscribe: function (eventName, fn) {
-            if (!map.hasOwnProperty(eventName)) {
-                return;
-            }
-
-            var index = map[eventName].indexOf(fn);
-            if (index !== -1) {
-                map[eventName].splice(index, 1);
-            }
-        },
-
-        unsubscribeMultiple: function (eventsNames, fn) {
-            console.log()
-            var i, length = eventsNames.length;
-            for (i = 0; i < length; i++) {
-                this.unsubscribe(eventsNames[i], fn);
-            }
-        },
-
-        unsubscribeAll: function (eventsNames) {
-            var i, length = eventsNames.length;
-            for (i = 0; i < length; i++) {
-                if (map.hasOwnProperty(eventsNames[i])) {
-                    delete (map[eventsNames[i]]);
-                }
-            }
-        },
-
-        notify: function (eventName) {
-            console.log("fired " + eventName);
-
-            if (!map.hasOwnProperty(eventName)) {
-                console.log("nobody listening " + eventName);
-                return;
-            }
-
-            var args = Array.prototype.slice.call(arguments, 1);
-            map[eventName].forEach(function (fn) {
-                fn.apply(this, args);
-            });
+    /**
+     * Add an event listener
+     * 
+     * @param {String} eventName Event's name
+     * @param {Function} fn Handler
+     * @returns {Function} the "unsubscriber". Call this function to unsubscribe this event (or use the unsubscribe method)
+     * 
+     * @memberOf EventManager
+     */
+    subscribe(eventName, fn) {
+        if (typeof eventName !== "string") {
+            throw "eventName must be string";
         }
-    };
-};
 
-module.exports = EventManager;
+        if (!eventName.length) {
+            throw "eventName cannot be empty";
+        }
+
+        if (!this._map.hasOwnProperty(eventName)) {
+            this._map[eventName] = [];
+        }
+
+        this._map[eventName].push(fn);
+        return this.unsubscribe.bind(this, eventName, fn);
+    }
+
+    /**
+     * @see subscribe
+     * Add an event listener to multiple event aht the sabe time
+     * 
+     * @param {String[]} eventNames Event's names
+     * @param {any} fn Handler
+     * @return {Function[]} Unsubscribers for all events
+     * @see EventManager.subscribe
+     * 
+     * @memberOf EventManager
+     */
+    subscribeMultiple(eventNames, fn) {
+        let i, length = eventNames.length;
+
+        var unsubscribes = [];
+        for (i = 0; i < length; i++) {
+            unsubscribes.push(this.subscribe(eventNames[i], fn));
+        }
+
+        return () => {
+            unsubscribes.map(unsubscribe => unsubscribe());
+        }
+    }
+
+    /**
+     * Removes an event listener from an event 
+     * 
+     * @param {string} eventName Event's name
+     * @param {Function} fn Handler to remove
+     * 
+     * @memberOf EventManager
+     */
+    unsubscribe(eventName, fn) {
+        if (!this._map[eventName]) {
+            return;
+        }
+
+        let index = this._map[eventName].indexOf(fn);
+        if (index !== -1) {
+            this._map[eventName].splice(index, 1);
+        }
+    }
+
+    /**
+     * @see unsubscribe
+     * Removes the event listener from multiple events
+     * 
+     * @param {String[]} eventNames Event's names
+     * @param {Function} fn
+     * 
+     * @memberOf EventManager
+     */
+    unsubscribeMultiple(eventNames, fn) {
+        let i, length = eventNames.length;
+
+        for (i = 0; i < length; i++) {
+            this.unsubscribe(eventNames[i], fn);
+        }
+    }
+
+    /**
+     * Removes all event listeners from the given events
+     * 
+     * @param {String[]} eventNames
+     * 
+     * @memberOf EventManager
+     */
+    unsubscribeAll(eventNames) {
+        let i, length = eventNames.length;
+        for (i = 0; i < length; i++) {
+            if (this._map.hasOwnProperty(eventNames[i])) {
+                delete this._map(eventNames[i]);
+            }
+        }
+    }
+
+    /**
+     * Trigger an event. Will send all arguments after eventName to the existent
+     * event listeners
+     * 
+     * @param {String} eventName Event's name
+     * 
+     * @memberOf EventManager
+     */
+    notify(eventName) {
+        if (!this._map.hasOwnProperty(eventName)) {
+            return;
+        }
+
+        // make an copy of the arguments to prevent someone to change it
+        let args = Array.prototype.slice.call(arguments, 1);
+        this._map[eventName].forEach(function (fn) {
+            fn.apply(this, args);
+        });
+    }
+}
+
+export default EventManager;

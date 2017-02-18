@@ -1,12 +1,12 @@
-var Config = require("./core/Config");
-var ConfigInstance = new Config();
+import Config from "./core/Config";
+import env from "env";
 
-var env = require(".env.js");
+const ConfigInstance = new Config();
 
-for (var config in env) {
+for (let config in env) {
     if (env.hasOwnProperty(config)) {
         ConfigInstance.set(config, env[config]);
     }
 }
 
-module.exports = ConfigInstance;
+export default ConfigInstance;

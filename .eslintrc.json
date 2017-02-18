@@ -1,0 +1,34 @@
+{
+    "extends": ["eslint:recommended", "plugin:react/recommended"],
+    "env": {
+        "browser": true,
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "globals": {
+        "require": true
+    },
+    "rules": {
+        "no-underscore-dangle": "warn",
+        "no-alert": "error",
+        "camelcase": "warn",
+        "eqeqeq": "warn",
+
+        "react/display-name": "error"
+    },
+    "plugins": [
+        "react"
+    ],
+     "settings": {
+        "react": {
+            "createClass": "createClass",
+            "pragma": "React"
+        }
+    }
+}

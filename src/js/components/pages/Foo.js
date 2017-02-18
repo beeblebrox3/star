@@ -1,20 +1,16 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Foo = React.createClass({
-    displayName: "pages.Foo",
+export default React.createClass({
+    displayName: "Foo",
 
     render: function () {
-        "use strict";
-
         return (
-            <div className="uk-grid">
-                <div className="uk-width-medium-1-1">
-                    foo
-                </div>
+            <div className="container">
+                <h1>Foo</h1>
+
+                <p>This is an example page!</p>
             </div>
         );
     }
 });
-
-module.exports = Foo;

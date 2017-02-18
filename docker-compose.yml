@@ -1,0 +1,17 @@
+version: '2'
+services:
+    buid:
+        build:
+            context: ./docker/build
+        image: star-build
+        volumes:
+            - ./:/app
+        command: bash -c "cd /app ; npm install ; npm rebuild node-sass ; npm run prod"
+        container_name: star-build
+    web:
+        image: httpd:alpine
+        container_name: star-web
+        volumes:
+            - ./web:/usr/local/apache2/htdocs
+        ports:
+            - 9866:80

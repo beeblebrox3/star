@@ -1,22 +1,17 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Home = React.createClass({
-    displayName: "pages.Home",
+export default React.createClass({
+    displayName: "Home",
 
     render: function () {
-        "use strict";
-
         return (
-            <div className="uk-width-medium-1-2 uk-container-center">
-                <div className="uk-align-center uk-text-center uk-margin-large-top">
-
-                    <h1 className="uk-heading-large">Star Framework</h1>
-                    <p className="uk-text-large">Welcome :)</p>
+            <div>
+                <div>
+                    <h1>Star Framework</h1>
+                    <p>Welcome :)</p>
                 </div>
             </div>
         );
     }
 });
-
-module.exports = Home;

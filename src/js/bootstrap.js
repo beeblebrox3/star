@@ -1,16 +1,29 @@
-var App = require("./app");
+// @flow
 
-App.libs.React = require("react");
-App.libs.ReactDOM = require("react-dom");
-App.libs._ = require("lodash");
-App.libs.Superagent = require("superagent");
-App.libs.Page = require("page");
+import React from "react";
+import ReactDOM from "react-dom";
 
-App.Config = require("./config");
+import debounce from "debounce";
+import Superagent from "superagent";
+import Page from "page";
+import ServicesContainer from "./core/ServicesContainer";
+import EventManager from "./core/EventManager";
 
-var ServicesContainer = require("./core/ServicesContainer");
+import App from "app";
+import Config from "./config";
+
+App.libs.React = React;
+App.libs.ReactDOM = ReactDOM;
+App.libs.debounce = debounce;
+App.libs.Superagent = Superagent;
+App.libs.Page = Page;
+
+App.Config = Config;
+
 App.ServicesContainer = new ServicesContainer();
-App.ServicesContainer.define("EventManager", require("./core/EventManager"));
+App.ServicesContainer.define("EventManager", EventManager);
+
+// shortcut
 App.EventManager = App.ServicesContainer.get("EventManager");
 
 require("./helpers/index");
@@ -18,4 +31,6 @@ require("./services/index");
 require("./components/index");
 require("./routes/index");
 
-module.exports = App;
+require("../css/main.scss");
+
+export default App;

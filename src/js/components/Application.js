@@ -1,31 +1,22 @@
-var App = require("app");
-var React = App.libs.React;
+import App from "app";
+const React = App.libs.React;
 
-var Application = React.createClass({
+export default React.createClass({
     displayName: "Application",
 
-    getDefaultProps: function () {
-        "use strict";
-
-        return {
-            pageTitle: "Home"
-        };
-    },
-
     render: function () {
-        "use strict";
-        
-        document.title = this.props.pageTitle;
-
         return (
-            <div className="uk-container uk-container-center uk-margin-top uk-margin-large-bottom">
-                <nav className="uk-navbar">
-                    <a className="uk-navbar-brand" href="/">Star</a>
-                    <ul className="uk-navbar-nav">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/foo">Foo</a></li>
-                        <li><a href="/x">404</a></li>
-                    </ul>
+            <div>
+                <nav>
+                    <div className="container">
+                        <a href="/">Star</a>
+                        <ul>
+                            <li><a href="/">Home</a></li>
+                            <li><a href="/foo">Foo</a></li>
+                            <li><a href="/movies">Movies</a></li>
+                            <li><a href="/x">404</a></li>
+                        </ul>
+                    </div>
                 </nav>
 
                 { this.props.children }
@@ -33,5 +24,3 @@ var Application = React.createClass({
         );
     }
 });
-
-module.exports = Application;

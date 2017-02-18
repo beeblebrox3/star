@@ -1,54 +1,81 @@
-var App = require("app");
-
-var ServicesContainer = function () {
-    "use strict";
-
-    this.instances = {};
-    this.map = {};
-};
-
-ServicesContainer.prototype.define = function (serviceName, service, context) {
-    "use strict";
-
-    if (!context) {
-        context = App;
-    }
-
-    if (typeof service === "string") {
-        service = App.helpers.object.getFlattened(service, context);
-    }
-
-    this.map[serviceName] = service;
-};
-
-ServicesContainer.prototype.setInstance = function (serviceName, instance) {
-    "use strict";
-
-    this.instances[serviceName] = instance;
-};
-
 /**
- * @param {string} serviceName
+ * An utility class to manage services.
+ * You can define your own services, share instances between components and create
+ * new instances when necessaru
+ * 
+ * @class ServicesContainer
  */
-ServicesContainer.prototype.get = function (serviceName) {
-    "use strict";
-
-    if (this.instances.hasOwnProperty(serviceName)) {
-        return this.instances[serviceName];
+class ServicesContainer {
+    /**
+     * Creates an instance of ServicesContainer.
+     * 
+     * 
+     * @memberOf ServicesContainer
+     */
+    constructor() {
+        this._instances = {};
+        this._map = {};
     }
 
-    this.setInstance(serviceName, this.getNewInstance(serviceName));
-    return this.instances[serviceName];
-};
-
-ServicesContainer.prototype.getNewInstance = function (serviceName) {
-    "use strict";
-
-    if (!this.map.hasOwnProperty(serviceName)) {
-        throw "Service " + serviceName + " not found";
+    /**
+     * Register new services.
+     * @param {String} serviceName name of the service (how clients will use it)
+     * @param {Class|Function} service the class/constructor of the service
+     */
+    define(serviceName, service) {
+        this._map[serviceName] = service;
     }
 
-    return new this.map[serviceName]();
-};
+    /**
+     * Same as define
+     * @see ServicesContainer.define
+     */
+    register(serviceName, service) {
+        this.define(serviceName, service);
+    }
 
-module.exports = ServicesContainer;
+    /**
+     * Register an instance of a service. If you only set the instance but not
+     * the constructor (with the define method) this service will be like an singleton.
+     * Nobody will be able to create an new instance of the service via ServicesContainer
+     * 
+     * @param {String} serviceName
+     * @param {Object} instance
+     */
+    setInstance(serviceName, instance) {
+        this._instances[serviceName] = instance;
+    }
+
+    /**
+     * Get an instance of a service. If the instance doens't exists yet it will
+     * instantiate it and return
+     * @param {String} serviceName
+     * @returns {Object}
+     */
+    get(serviceName) {
+        if (!this._instances.hasOwnProperty(serviceName)) {
+            this.setInstance(serviceName, this.getNewInstance(serviceName));
+        }
+
+        return this._instances[serviceName];
+    }
+
+    /**
+     * Get a new instance of a service. Note that if you do not provide an constructor/class,
+     * this method will fail
+     * @param {String} serviceName
+     */
+    getNewInstance(serviceName) {
+        if (this._instances.hasOwnProperty(serviceName) && !this._map.hasOwnProperty(serviceName)) {
+            throw new Error(`Service ${serviceName} is an singleton, you cannot create a new instance`);
+        }
+
+        if (!this._map.hasOwnProperty(serviceName)) {
+            throw new Error(`Service ${serviceName} not found`);
+        }
+
+        return new this._map[serviceName]();
+    }
+}
+
+export default ServicesContainer;

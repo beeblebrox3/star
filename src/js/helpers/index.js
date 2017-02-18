@@ -1,7 +1,11 @@
-var App = require("app");
+import App from "app";
 
-App.helpers = {};
+import ArrayHelpers from "./array/index";
+import DateHelpers from "./array/index";
+import StringHelpers from "./array/index";
+import ObjectHelpers from "./object/index";
 
-require("./object/index");
-require("./string/index");
-require("./array/index");
+App.helpers.array = ArrayHelpers;
+App.helpers.date = DateHelpers;
+App.helpers.string = StringHelpers;
+App.helpers.object = ObjectHelpers;

@@ -1,10 +1,11 @@
-var App = require("app");
-var Page = App.libs.Page;
-var RDOM = require("react-dom");
-var React = require("react");
+import App from "app";
 
-var Router = {};
-var DOMNode = document.querySelector("#react-root");
+const Page = App.libs.Page;
+const RDOM = App.libs.ReactDOM;
+const React = App.libs.React;
+
+let Router = {};
+const DOMNode = document.querySelector("#react-root");
 
 Router.setRoute = function (route) {
     "use strict";

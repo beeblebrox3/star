@@ -6,5 +6,10 @@
 /.project
 /.idea
 /web/libs
+/web/css/*.css
+/web/js/*.js
 .buildpath
 sigep.komodoproject
+/coverage-report
+/coverage
+/docs

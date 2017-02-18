@@ -1,9 +1,10 @@
-var App = require("app");
-var Page = App.libs.Page;
+import App from "app";
+const Page = App.libs.Page;
 
-var Router = App.ServicesContainer.get("ROUTER");
-var defaultLayout = App.components.Application;
-var Pages = App.components.pages;
+const Router = App.ServicesContainer.get("ROUTER");
+const defaultLayout = App.components.Application;
+const Pages = App.components.pages;
 
 Page("/", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Home));
 Page("/foo", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Foo));
+Page("/movies", Router.renderPageWithLayout.bind(null, defaultLayout, Pages.Movies));

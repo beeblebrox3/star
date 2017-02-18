@@ -1,23 +1,6 @@
 # Star
 
-> [Demo](http://star.luque.cc/)
-
-Dev:
-
-```shell
-webpack --progress --colors --watch
-```
-
-Devserver:
-```shell
-npm run dev
-```
-
-Production build:
-
-```shell
-npm run prod
-```
+> [Demo](https://es2015.star.luque.cc/)
 
 ## About
 This project is just a place for me to think about how  organize my front-end code. I'm not suggesting you to use, but you can - and I hope you do - ask questions or make suggestions ;)
@@ -26,18 +9,34 @@ This project is just a place for me to think about how  organize my front-end co
 
 ## Tools
 The main tools here are:
- - [React](http://facebook.github.io/react/);
- - [Gulp](http://gulpjs.com/);
- - [Browserify](http://browserify.org/).
+ - [React](https://facebook.github.io/react/);
+ - [Webpack](https://webpack.github.io/);
 
 ## Install
-@todo install -g babel-core
+
+Clone, yarn and run!
+
+```shell
+# clone
+git clone git@github.com:beeblebrox3/star
+cd star
+
+# install dependencies
+yarn install
+
+# start dev server
+npm run dev
+
+# to build the production build:
+npm run prod
+```
 
 ## How the code is organized
 ### Namespaces
 A good design principle is maintain a single global variable, so we have `App`.
 Inside it we put all libraries, components etc.
 We have something like:
+
 ```javascript
 // /index.js
 var App = {

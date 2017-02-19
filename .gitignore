@@ -13,3 +13,4 @@ sigep.komodoproject
 /coverage-report
 /coverage
 /docs
+.env.*.js

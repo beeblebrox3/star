@@ -4,7 +4,7 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/master)
 
-> [Demo](https://es2015.star.luque.cc/)
+> [Demo](https://star.luque.cc/)
 
 ## About
 This project is just a place for me to think about how  organize my front-end code. I'm not suggesting you to use, but you can - and I hope you do - ask questions or make suggestions ;)

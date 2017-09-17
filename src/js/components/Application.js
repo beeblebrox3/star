@@ -1,26 +1,35 @@
 import App from "app";
 const React = App.libs.React;
 
-export default React.createClass({
-    displayName: "Application",
-
-    render: function () {
+export default class Application extends React.Component {
+    render() {
         return (
             <div>
-                <nav>
+                <nav className="main-menu">
                     <div className="container">
-                        <a href="/">Star</a>
-                        <ul>
-                            <li><a href="/">Home</a></li>
-                            <li><a href="/foo">Foo</a></li>
-                            <li><a href="/movies">Movies</a></li>
-                            <li><a href="/x">404</a></li>
-                        </ul>
+                        <div className="brand-container">
+                            <a className="brand" href="/">Star</a>
+                        </div>
+
+                        <div className="main-menu-list-container">
+                            <ul className="main-menu-list">
+                                <li className="main-menu-item"><a href="/">Home</a></li>
+                                <li className="main-menu-item"><a href="/foo">Foo</a></li>
+                                <li className="main-menu-item"><a href="/movies">Movies</a></li>
+                                <li className="main-menu-item"><a href="/x">Broken Link</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </nav>
 
-                { this.props.children }
+                <div className="page-content">
+                    { this.props.children }
+                </div>
+
+                <footer>
+                    Demo page built with <a href="http://github.com/beeblebrox3/star">Star Framework</a>.
+                </footer>
             </div>
         );
     }
-});
+}

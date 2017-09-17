@@ -29,10 +29,10 @@ cd star
 yarn install
 
 # start dev server
-npm run dev
+yarn dev
 
 # to build the production build:
-npm run prod
+yarn prod
 ```
 
 ## How the code is organized
@@ -43,11 +43,10 @@ We have something like:
 
 ```javascript
 // /index.js
-var App = {
-	helpers: {},
-	libs: {},
-	components: {},
-	services: {}
+const App = {
+	helpers: {}, // for your app custom helpers
+	libs: {}, // for 3rd party libs, like React
+	components: {}, // for all your react components
 };
 ```
 
@@ -55,9 +54,10 @@ var App = {
 Libraries like [jQuery](http://jquery.com/), [moment](http://momentjs.com/) or [React](https://facebook.github.io/react/) are placed into `App.libs` namespace:
 
 ```javascript
-var App = require("app");
+import App from "app"
+import React from "react"
 
-App.libs.React = require("react");
+App.libs.React = React
 ```
 
 If you need multiple versions of the same library (don't know why), you can indicate the version to:
@@ -74,89 +74,89 @@ App.libs.React = window.React;
 ```
 In this case, React is available globally. So we put it on our namespace to make easy to change this in the future without have to change all code that uses React.
 
+> Tip: you can replace App.libs.React with [Inferno](https://infernojs.org/) and everything still works.
+
 #### helpers
 We wrote a lot of functions that are used in multiple places and a nice thing to do is keep them well organized according to it scopes. Let's see an example:
 
 ```javascript
-// /helpers/object/index.js
+// /helpers/xpto.js
 
-var App = require('app');
-App.helpers.object = {};
+import App from "app"
+App.helpers.xpto = () => return "foo";
 
-App.helpers.object.doSomething = function () {};
-App.helpers.object.doSomethingElse = require('./doSomethingElse.js');
+// on another file
+import App from "app";
+console.log(App.helpers.xpto()); // "foo"
 ```
+
+> Tip: Star has some helpers to help you out. They were moved to [another project](https://www.npmjs.com/package/super-helpers) to be used by another tools. They are available in `App.libs.shelpers`. For documentation, [see here](https://beeblebrox3.github.io/super-helpers/).
 
 #### components
 Here we have, of course, components. I'm using React, so it's React Components. Like this:
 
 ```jsx
-// /components/homepage.jsx file
-var App = require("app");
-React = App.libs.React;
+// /components/homepage.js file
+import App from "app"
+const React = App.libs.React;
 
-App.components.HomePage = React.createClass({
-	render: function () {
-		return <div>:)</div>;
-	}
-});
+App.components.HomePage = function () {
+  return (
+    <div>
+      Hello!
+      { props.children }
+    </div>
+  );
+};
 ```
 
-#### services
-Services provide the data to the components. They can interact with the backend, local storage, cookies etc. We have a special way to get those services on our components, but we'll see this  later.
+#### services and providers
+Services and providers provide data to the components. They can interact with the backend, local storage, cookies etc. We have a special way to get those services on our components, but we'll see this  later.
 
 ### Files and directories
 Here's the `src/js` direcotry.
 ```
-src/js
-├── app.js
-├── bootstrap.js
-├── components
-│   ├── Application.js
-│   ├── base
-│   │   └── index.js
-│   ├── index.js
-│   ├── mixins
-│   │   └── index.js
-│   └── pages
-│       ├── Foo.js
-│       ├── Home.js
-│       └── index.js
-├── config.js
-├── core
-│   ├── Config.js
-│   ├── EventManager.js
-│   ├── Router.js
-│   └── ServicesContainer.js
-├── helpers
-│   ├── array
-│   │   └── index.js
-│   ├── index.js
-│   ├── lang
-│   │   ├── index.js
-│   │   └── messages.js
-│   ├── object
-│   │   └── index.js
-│   └── string
-│       └── index.js
-├── languages
-│   └── pt
-│       └── validator.js
-├── routes.js
-├── services
-│   ├── ajax
-│   │   └── Request.js
-│   ├── index.js
-│   ├── RestInterface.js
-│   └── User.js
-└── triggers.js
+└── src/js
+    ├── app.js
+    ├── bootstrap.js
+    ├── components
+    │   ├── Application.js
+    │   ├── base
+    │   │   └── index.js
+    │   ├── index.js
+    │   ├── NotFound.js
+    │   └── pages
+    │       ├── Foo.js
+    │       ├── Home.js
+    │       └── index.js
+    ├── config.js
+    ├── core
+    │   ├── Config.js
+    │   ├── EventManager.js
+    │   ├── Router.js
+    │   └── ServicesContainer.js
+    ├── helpers
+    │   └── index.js
+    ├── providers
+    │   └── index.js
+    ├── routes
+    │   ├── applicationRoutes.js
+    │   ├── index.js
+    │   └── middlewares.js
+    └── services
+        ├── ajax
+        │   └── Request.js
+        ├── cache
+        │   └── Persistent.js
+        ├── index.js
+        └── RestInterface.js
 ```
 
 I created some patterns around here, let's see some of them.
 All starts with the file `bootstrap.js`. It requires the other files and core modules.
 One convention that I have is that each namespace has its own directory. Inside this directory must exists a `index.js` file, that creates the namespace and requires the other files. The namespaces can have a complex structure, with a bunch of subfolders and this pattern (and `index.js` file) can be applied to.
 
-### Modules
+### Core Modules
 This package has some modules that make this strutcture work. Let's see them:
 
 #### Config
@@ -167,6 +167,9 @@ App.Config.get("inexistent_config");
 App.Config.get("inexistent_config", "default value");
 App.Config.set("inexistent_config", "some value");
 App.Config.get("inexistent_config");
+
+// shortcut
+App.config("existent_config"); // shortcut to App.Config.get
 ```
 
 The previous code shows how `Config` module works. You have just two methods: `get()` and `set()` .
@@ -177,12 +180,13 @@ Finally, in the fourth line we have "some value" as returned value, because we s
 This module is available on all components, libs, services etc, because is defined in the first lines of bootstrap.js file.
 The  default configuration values can be set on the `config.js` file on root folder.
 
+On `src/js/config.js` the framework will scan the  `/.env.js` file and set every config on that file in the `App.Config` instance. You can create additional configs, if you want.
 
 ### EventManager
 This module, like the name suggests, allows you to fire and observe application's events. Let's see:
 
 ```javascript
-var eventHandler = function () {
+const eventHandler = function () {
 	// do something
 };
 
@@ -210,12 +214,19 @@ App.EventManager.notify("eventA", "parameter1", "parameter2");
 
 You can define as many handlers you want for each event.
 
+**Tip**: the subscrive method returns an function that do the unsubscribe. Sou you can for instance: 
+```js
+const dispose = App.EventManager("EventX", () => console.log("x"));
+
+dispose(); // will unsubscrive
+```
+
 ### ServicesContainer
 This module aims to be a single point to get any service from the application. It allows you to share instances from services between components, for example, without need to pass it over props (react components) or other means, but keeping the flexibility to create new instances if you need it.
 Let's see some code:
 
 ```javascript
-var ServiceXPTO = function () {
+const ServiceXPTO = function () {
 };
 ServiceXPTO.prototype.sayHi() {
 	return "Hi :D";
@@ -227,23 +238,26 @@ App.ServicesContainer.get("ServiceXPTO").sayHi(); // returns "Hi :D"
 App.ServicesContainer.get("ServiceXPTO").sayHi(); // returns "Hi :D"
 App.ServicesContainer.getNewInstance("ServiceXPTO").sayHi(); // returns "Hi :D"
 App.ServicesContainer.setInstance("AnotherServiceXPTO", new ServiceXPTO());
+
+// shortcut
+App.service("ServiceXPTO").sayHi(); // returns "Hi :D"
 ```
 
-We use the `define()` method to register services on ServicesContainer. You can name it like you want. With `get()` method we get an instance of the service. At the first time that this method is called for get a specific service, the container will instantiates this service (` new ServiceName()`) and returns it. Next time you ask for this service, the same instance will be returned. If you need a new instance, even after call `get()` N times before, you can use the method `getNewInstance()`.
+We use the `define()` (or `register()`) method to register services on ServicesContainer. You can name it like you want. With `get()` method we get an instance of the service. At the first time that this method is called for get a specific service, the container will instantiate this service (` new ServiceName()`) and returns it. Next time you ask for this service, the same instance will be returned. If you need a new instance, even after call `get()` N times before, you can use the method `getNewInstance()`.
 The method `setInstance()` allows you to pass to the container the instance that the `get()` method should return. If you don't register the service with the `define()` method, the getNewInstance() will not work. So consider `the setInstance()` as a way to create a [Singleton](https://pt.wikipedia.org/wiki/Singleton).
 
 By default, we have 3 registered services. **EventManager**, **ROUTER** and **AJAX**.
 The **EventManager** is not the App.EventManager, but it's constructor. Some services can have it's own internal events handlers, like the `Request`. They can use a clean instance of EventManager to not mess with the application events.
-**ROUTER** is the instance of  [Director](https://github.com/flatiron/director) that I'm using for routes (more about it later).
+**ROUTER** is the Star's Router. More about it later.
 Finally, **AJAX** is a service that I built to simplify ajax requests. I was using jQuery, but wanna to try without it (more about it later).
 
 ## AJAX
-jQuery was present on 99% of the projects that I worked on, so all my ajax stuff was built with it. This project don't. I'm using [Superagent](https://github.com/visionmedia/superagent). But I want to make much easy to use it with the services, so I built a wrapper to help.
+jQuery was present on a lot of the projects that I worked on, so almost all my ajax stuff was built with it. This project don't. I'm using [Superagent](https://github.com/visionmedia/superagent). But I want to make much easy to use it with the services, so I built a wrapper to help.
 It's a registered service named `AJAX` (`App.ServicesContainer.get("AJAX")`).
 Let's see an example:
 
 ```javascript
-var Request = App.ServicesContainer.get("AJAX");
+const Request = App.ServicesContainer.get("AJAX");
 
 Request.onStart(function (req) {
 	// do stuff before every request made with this instance
@@ -302,79 +316,76 @@ Request.make({
 });
 ```
 
-> On all callbacks, the argument `req` is the request created with Superagent and you can interact with it over there.
+On all callbacks, the argument `req` is the request created with Superagent and you can interact with it over there.
+
 > This service is registered on `src/js/index.js`. I take the liberty to set the header `Accept` with `application/json` for you. You can get a clean instance from the service or just remove the lines that configure the onStart callback and you'll be fine :)
 
 
 ## Routes and pages
-I've started to work with SPA's not so long ago, so I'm still discovering how to build things. Before I used React Router, but didn't like it very much. Someone recommended Director one time and I'm trying to use it.
-There's a `routes.js`on the js root directory. We have something like:
+I've started to work with SPA's not so long ago, so I'm still discovering how to build things. Before I used React Router, but didn't like it very much. Someone recommended Director  and finally I discovered [Page.js](http://visionmedia.github.io/page.js/).
 
-```jsx
-var App = require("app");
-var Router = App.libs.Director.Router;
-var React = App.libs.React;
+To register your app routes, go to `src/js/routes/applicationRoutes.js` file.
 
-var router = new Router({
-    "/": function () {
-        React.render(
-            <App.components.Application>
-                <App.components.pages.Home />
-            </App.components.Application>,
-            document.body
-        );
-    }
-});
+```js
+[...]
 
-router.init();
-App.ServicesContainer.setInstance("ROUTER", router);
+Router.setDefaultLayout(App.components.Application);
+Router.addRoute('/', App.components.pages.Home);
 ```
 
 > Note that we set the instance of Router on ServicesContainter and cannot create a new one elsewhere.
 
-Director is very simple. We define a path and what to do when user access it.
+Page.js is very simple. We define a path and what to do when user access it.
 On applications that I did with Laravel, cake and other PHP frameworks with template engines, a recurring thing is use a layout with a view. The layout is used by multiple pages and have the common elements, like menus, footer etc. The view has specific components to that page (URL). So I've tried to create this structure here.
 
-The component `App.components.Application` is the default layout (you can see that it have a menu). Most routes will use it. Inside it we have aother component, that is the view. On the "/" path, we have the component `App.components.pages.Home`. It has specific code for that path.
+The component `App.components.Application` is the default layout (you can see that it have a menu). Most routes will use it. Inside it we have another component, that is the view. On the "/" path, we have the component `App.components.pages.Home`. It has specific code for that path.
+
+So, to set the default layout you can use `Router.setDefaultLayout()`. All routes will use this layout.
+
 Another URL can use the same layout with a different view, like this:
 
-```jsx
-var routes = {
-	"/foo": function () {
-		<App.components.Application>
-			<App.components.pages.Foo />
-		</App.components.Application>
-	}
-};
+```js
+Router.addRoute('/foo', App.components.pages.Foo);
 ```
 In that case, the same layout will be used, but a different component will handle the "/foo" path.
 
 Some pages are completely different, like longin pages. We can render directly the page, without a layout, for example:
 
-```jsx
-var routes = {
-	"/login": function () {
-		<App.components.pages.Login />
-	}
-};
+```js
+Router.addRoute("/login", {component: App.components.pages.Login, layout: null});
 ```
 
 > Note that there's no difference between a layout and a page, both are just components. The way you use the component will define if is a layout or a view.
 
-Right now I'm not quite happy with the way the routes are handled. I want something less verbose, that understands how I handle pages, but still with the flexibility that Director gives me. I'm working on it, but the previous attempts didn't look so well. But I will keep trying :)
+To create dynamic URLs you can use the `:<param>` pattern:
+```js
+Router.addRoute("/users/:userId", App.components.pages.User);
+```
 
-I want to do something like:
+The code above will match with "/users/10", "/users/25" and so on. The value of this parameter will be passed to your component as a prop (`this.props.userId`).
 
-```jsx
-Router.setLayout(App.components.Application />);
-Router.on("/", App.components.pages.Home);
-Router.on("/foo", App.components.pages.Foo);
-Router.on("/login", {
-	render: App.components.pages.Login
+You can create middlewares on the `src/js/routes/middlewares.js` file.
+
+> Tip: the router will pass some props to your page component. The first one is `context`. Is the Page.js context object. Maybe you should avoid it, cause we can remove Page.js in the future. The second one is the all the route named parameters. We also pass all query string parameters (there's a middleware doing that, so you can disable id).
+
+### Router experiments
+When rebuilding the Router I made an experiment. Tell me what you think:
+
+```js
+Router.addRoute("/users/:userId", App.components.pages.User);
+Router.addResolver("userId", (value, context, next) => {
+  App.service("Users").find(value).then(user => {
+    context.params.user = user;
+    next();
+  });
 });
 ```
-With this code, I expect that on `/` and `/foo`, the `App.components.Application` layout will be used and each path will render `Home` and `Foo` pages respectively. On `/login` path, just `Login` will be rendered.
-That way will be faster to create routes, less verbose and still flexible.
+
+**What is happening:**
+We created a route with an parameter named `userId`.
+A resolver is a function that can transform and dynamic parameter in another value to pass to the page component. In the example above, we add a resolver to `userId` parameter. Every route that and parameter with this name will call this resolver before the page component (like a middleware by parameter, not route).
+In this case, we use the `Users` service to fetch use data (from the backend, for example) and pass it to the page.
+
 
 > Remember: this is still a work in progress.
 

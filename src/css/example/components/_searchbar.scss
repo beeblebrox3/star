@@ -1,0 +1,24 @@
+.search-bar {
+    padding: 0.5em;
+    margin: auto;
+    width: 90%;
+    max-width: 600px;
+
+    input[type="search"] {
+        display: block;
+        font-size: 1.3em;
+        text-align: center;
+        font-weight: 100;
+        color: #666;
+        font-family: $default-font;
+        width: 100%;
+        padding: 0.3em 0.8em;
+        border-radius: 30px;
+        border: 1px solid #aaa;
+        outline: none;
+
+        &::-webkit-input-placeholder {
+            color: #999;
+        }
+    }
+}

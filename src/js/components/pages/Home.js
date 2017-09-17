@@ -1,10 +1,9 @@
 import App from "app";
 const React = App.libs.React;
 
-export default React.createClass({
-    displayName: "Home",
+class Home extends React.Component {
 
-    render: function () {
+    render () {
         return (
             <div>
                 <div>
@@ -14,4 +13,8 @@ export default React.createClass({
             </div>
         );
     }
-});
+}
+
+Home.displayName = "Home";
+
+export default Home;

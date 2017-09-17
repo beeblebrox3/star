@@ -1,39 +1,58 @@
 /* eslint-env node */
 const path = require("path");
+const fs = require("fs");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 const environment = process.env.NODE_ENV;
 const PROD = environment === "production";
-const defaultEnvFile = ".env.js";
-const envFile = path.join(
-    __dirname,
-    environment ? ".env." + process.env.NODE_ENV + ".js" : defaultEnvFile
-);
 
-let plugins = [
-    new webpack.HotModuleReplacementPlugin()
-];
+const defaultEnvFile = ".env.js";
+let envFile = path.resolve(__dirname, `.env.${environment}.js`);
+if (!fs.existsSync(envFile)) {
+    envFile = path.resolve(__dirname, defaultEnvFile);
+}
+
+const getPath = function () {
+    return path.join(__dirname, ...arguments);
+};
+
+let plugins = [];
 
 let loaders = [{
     test: /\.jsx?$/,
     exclude: /node_modules/,
-    loader: "babel",
-    query: {
-        presets: ["react", "es2015"]
+    use: {
+        loader: "babel-loader",
+        options: {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions"]
+                    }
+                }],
+                "react"
+            ],
+        }
     }
 }, {
     test: /\.scss$/
+}, {
+    test: /\.(eot|ttf|svg|png|jpg|gif|woff2?)$/,
+    loader: 'url-loader',
+    query: {
+        limit: 10240,
+        name: 'static/[hash].[ext]'
+    }
 }];
 
 if (PROD) {
     plugins.push(
-        new webpack.optimize.UglifyJsPlugin({
-            compress: { warnings: false }
+        new ExtractTextPlugin({
+            filename: "../css/bundle.css",
+            disable: process.env.NODE_ENV === "development"
         })
-    );
-    plugins.push(
-        new ExtractTextPlugin("../css/bundle.css")
     );
 
     plugins.push(
@@ -43,19 +62,37 @@ if (PROD) {
             }
         })
     );
-    loaders[1].loader = ExtractTextPlugin.extract("style", "css!sass");
+
+    plugins.push(new MinifyPlugin());
+
+    loaders[1].use = ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: ["css-loader", "sass-loader"]
+    });
 } else {
-    loaders[1].loaders = ["style", "css", "sass"];
+    loaders[1].use = ["style-loader", "css-loader", "sass-loader"];
+    loaders[0].query.presets.push("react-hmre");
+
+    plugins.push(
+        new webpack.SourceMapDevToolPlugin({
+            lineToLine: true
+        })
+    );
+
+    plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
 let config = {
-    entry: "./src/js/bootstrap.js",
+    entry: getPath("src/js/bootstrap.js"),
     devServer: {
         hot: true,
-        inline: true
+        inline: true,
+        disableHostCheck: true,
+        host: "0.0.0.0"
     },
+    // devtool: "#inline-source-map",
     output: {
-        path: "./web/js",
+        path: getPath("web/js"),
         filename: "bundle.js",
         library: "App",
         libraryTarget: "umd",
@@ -67,7 +104,7 @@ let config = {
     resolve: {
         alias: {
             env: envFile,
-            app: path.join(__dirname, "src/js/app.js")
+            app: getPath("src/js/app.js")
         }
     },
     plugins: plugins

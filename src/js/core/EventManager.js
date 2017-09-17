@@ -1,6 +1,6 @@
 /**
  * Utility class to handle with events (subscribe, notify etc)
- * 
+ *
  * @class EventManager
  */
 class EventManager {
@@ -10,11 +10,11 @@ class EventManager {
 
     /**
      * Add an event listener
-     * 
+     *
      * @param {String} eventName Event's name
      * @param {Function} fn Handler
      * @returns {Function} the "unsubscriber". Call this function to unsubscribe this event (or use the unsubscribe method)
-     * 
+     *
      * @memberOf EventManager
      */
     subscribe(eventName, fn) {
@@ -25,6 +25,8 @@ class EventManager {
         if (!eventName.length) {
             throw "eventName cannot be empty";
         }
+
+        console.log(this);
 
         if (!this._map.hasOwnProperty(eventName)) {
             this._map[eventName] = [];
@@ -37,12 +39,12 @@ class EventManager {
     /**
      * @see subscribe
      * Add an event listener to multiple event aht the sabe time
-     * 
+     *
      * @param {String[]} eventNames Event's names
      * @param {any} fn Handler
      * @return {Function[]} Unsubscribers for all events
      * @see EventManager.subscribe
-     * 
+     *
      * @memberOf EventManager
      */
     subscribeMultiple(eventNames, fn) {
@@ -59,11 +61,11 @@ class EventManager {
     }
 
     /**
-     * Removes an event listener from an event 
-     * 
+     * Removes an event listener from an event
+     *
      * @param {string} eventName Event's name
      * @param {Function} fn Handler to remove
-     * 
+     *
      * @memberOf EventManager
      */
     unsubscribe(eventName, fn) {
@@ -80,10 +82,10 @@ class EventManager {
     /**
      * @see unsubscribe
      * Removes the event listener from multiple events
-     * 
+     *
      * @param {String[]} eventNames Event's names
      * @param {Function} fn
-     * 
+     *
      * @memberOf EventManager
      */
     unsubscribeMultiple(eventNames, fn) {
@@ -96,9 +98,9 @@ class EventManager {
 
     /**
      * Removes all event listeners from the given events
-     * 
+     *
      * @param {String[]} eventNames
-     * 
+     *
      * @memberOf EventManager
      */
     unsubscribeAll(eventNames) {
@@ -113,12 +115,13 @@ class EventManager {
     /**
      * Trigger an event. Will send all arguments after eventName to the existent
      * event listeners
-     * 
+     *
      * @param {String} eventName Event's name
-     * 
+     *
      * @memberOf EventManager
      */
     notify(eventName) {
+        console.log(eventName);
         if (!this._map.hasOwnProperty(eventName)) {
             return;
         }

@@ -1,9 +1,12 @@
-let App = window.App || {};
+const App = {
+    // where all your react components live
+    components: {},
 
-App.components = App.components || {};
-App.libs = App.libs || {};
-App.helpers = App.helpers || {};
-App.services = App.services || {};
+    // 3rd party libs
+    libs: {},
 
+    // application custom helpers
+    helpers: {}
+};
 
 export default App;

@@ -118,7 +118,7 @@ class Request {
 
     /**
      * make a xhr with more options
-     * @param  {Object} config
+     * @param  {{url: string, method: string, onStart: function, onStop: function, onSuccess: function, onError: function, headers: Object, type: string, data: Object}} config
      * @param  {String} config.url URL to make the request
      * @param  {String} config.method The method. One of: get, post, put, del, delete
      * @param  {Function} config.onStart Callback called before send the resquest
@@ -139,6 +139,7 @@ class Request {
             onSuccess: null,
             onError: null,
             headers: {},
+            type: null,
             data: {}
         };
 
@@ -148,7 +149,17 @@ class Request {
             options.method = "del";
         }
 
-        let req = sa[options.method](options.url).send(options.data);
+        let req = sa[options.method](options.url);
+
+        if (options.method === "get") {
+            req.query(options.data);
+        } else {
+            req.send(options.data);
+        }
+
+        if (options.type) {
+            req.type(options.type);
+        }
 
         this.EM.notify("start", req);
         if (typeof options.onStart === "function") {

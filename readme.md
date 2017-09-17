@@ -180,6 +180,7 @@ Finally, in the fourth line we have "some value" as returned value, because we s
 This module is available on all components, libs, services etc, because is defined in the first lines of bootstrap.js file.
 The  default configuration values can be set on the `config.js` file on root folder.
 
+On `src/js/config.js` the framework will scan the  `/.env.js` file and set every config on that file in the `App.Config` instance. You can create additional configs, if you want.
 
 ### EventManager
 This module, like the name suggests, allows you to fire and observe application's events. Let's see:

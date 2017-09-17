@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const MinifyPlugin = require("babel-minify-webpack-plugin");
 
 const environment = process.env.NODE_ENV;
 const PROD = environment === "production";
@@ -17,16 +18,23 @@ const getPath = function () {
     return path.join(__dirname, ...arguments);
 };
 
-let plugins = [
-    new webpack.HotModuleReplacementPlugin()
-];
+let plugins = [];
 
 let loaders = [{
     test: /\.jsx?$/,
     exclude: /node_modules/,
-    loader: "babel-loader",
-    query: {
-        presets: ["env", "react"]
+    use: {
+        loader: "babel-loader",
+        options: {
+            "presets": [
+                ["env", {
+                    "targets": {
+                        "browsers": ["last 2 versions"]
+                    }
+                }],
+                "react"
+            ],
+        }
     }
 }, {
     test: /\.scss$/
@@ -40,10 +48,6 @@ let loaders = [{
 }];
 
 if (PROD) {
-    plugins.push(
-        new webpack.optimize.UglifyJsPlugin()
-    );
-
     plugins.push(
         new ExtractTextPlugin({
             filename: "../css/bundle.css",
@@ -59,6 +63,8 @@ if (PROD) {
         })
     );
 
+    plugins.push(new MinifyPlugin());
+
     loaders[1].use = ExtractTextPlugin.extract({
         fallback: "style-loader",
         use: ["css-loader", "sass-loader"]
@@ -72,6 +78,8 @@ if (PROD) {
             lineToLine: true
         })
     );
+
+    plugins.push(new webpack.HotModuleReplacementPlugin());
 }
 
 let config = {

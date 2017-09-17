@@ -1,42 +1,42 @@
 import App from "app";
-import Result from "./Result";
+import Media from "./Media";
 
 /** @type React */
 const React = App.libs.React;
 
-export default React.createClass({
-    displayName: "Movies.Results",
-
-    getDefaultProps: function () {
-        return {
-            results: null,
-            searching: false
-        };
-    },
-
-    render: function () {
+class Results extends React.Component {
+    renderLoading() {
         if (this.props.searching) {
-            return <p>searching...</p>
-        }
-        if (this.props.results === null) {
-            return <p>search something!</p>;
-        }
-        
-        if (!this.props.results.length) {
-            return <p>no results :(</p>;
+            return <center>Searching...</center>;
         }
 
+        if (!this.props.results.length) {
+            return <center>No results ☹</center>;
+        }
+    }
+
+    render() {
         return (
             <div>
                 <h2>Results</h2>
-                <div className="movies-search-results">
-                    <ul className="movies-search-results-list">
+                <div className="medias-wall">
+                    <ul className="medias-wall-list">
+                        { this.renderLoading() }
+
                         { this.props.results.map(
-                            (result, index) => <Result {...result } key={ index } />
+                            (result, index) => <li className="medias-wall-list-item" key={ index }><Media {...result } key={ index } /></li>
                         ) }
                     </ul>
                 </div>
             </div>
         );
     }
-});
+}
+
+Results.displayName = "Movies.Results";
+Results.defaultProps = {
+    results: [],
+    searching: false
+};
+
+export default Results;

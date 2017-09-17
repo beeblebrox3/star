@@ -1,0 +1,41 @@
+body, body * {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    min-height: 100%;
+}
+
+body {
+    font-family: $default-font;
+    padding: 1em;
+    margin: 0;
+    text-align: center;
+    color: $primary-color;
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+.container {
+    position: relative;
+    width: 80%;
+    max-width: 1500px;
+    margin: auto;
+}
+
+a {
+    color: $link-color;
+    text-decoration: underline;
+
+    &:hover {
+        color: $link-color-hover;
+    }
+}
+
+.page-content {
+    margin-top: 3em;
+    padding-bottom: 3em;
+}

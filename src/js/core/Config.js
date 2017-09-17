@@ -1,6 +1,6 @@
 /**
  * Class to handle configurations of the application
- * 
+ *
  * @class Config
  */
 class Config {
@@ -19,7 +19,7 @@ class Config {
 
     /**
      * Get the value of the configuration or the default value
-     * 
+     *
      * @param {String} configName Config name
      * @param {*} defaultValue Value to return if config doesn't exists
      * @returns {*}

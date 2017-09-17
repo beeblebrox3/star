@@ -8,9 +8,16 @@
 /web/libs
 /web/css/*.css
 /web/js/*.js
+/web/img/**/*.png
+/web/img/**/*.jpg
+/web/img/**/*.ico
 .buildpath
-sigep.komodoproject
 /coverage-report
 /coverage
 /docs
 .env.*.js
+.env.js
+!.env.example.js
+.vscode/
+/*.log
+

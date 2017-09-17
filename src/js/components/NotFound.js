@@ -1,10 +1,8 @@
 import App from "app";
 const React = App.libs.React;
 
-export default React.createClass({
-    displayName: "Application",
-
-    render: function () {
+export default class NotFound extends React.Component {
+    render() {
         return (
             <div className="container">
                 <h1>Ops! Page not found!</h1>
@@ -13,4 +11,4 @@ export default React.createClass({
             </div>
         );
     }
-});
+}

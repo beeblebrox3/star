@@ -1,0 +1,45 @@
+.main-menu {
+    // border: 1px solid blue;
+
+    .container {
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: stretch;
+    }
+
+    .brand-container {
+        flex: 2;
+        display: inline-block;
+
+        .brand {
+            font-size: 2em;
+            text-decoration: none;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: black;
+            font-family: $brand-font;
+        }
+    }
+
+    .main-menu-list-container {
+        flex: 8;
+        display: inline-block;
+
+        .main-menu-list {
+            margin: 0;
+            padding: 0;
+            text-align: right;
+        }
+
+        .main-menu-item {
+            list-style: none;
+            display: inline-block;
+            margin: 0 .5em;
+
+            a {
+                display: inline-block;
+                padding: .5em .2em;
+            }
+        }
+    }
+}

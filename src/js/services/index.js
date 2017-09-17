@@ -1,9 +1,8 @@
 import App from "app";
-import Request from "./ajax/Request";
 
 // application's services
-import User from "./User";
-import Movies from "./Movies";
+import Request from "./ajax/Request";
+import PersistentCache from "./cache/Persistent";
 
 // example:
 // constructor
@@ -16,15 +15,8 @@ import Movies from "./Movies";
 // Default services
 // interface to handle AJAX requests
 App.ServicesContainer.define("AJAX", Request);
+App.ServicesContainer.define("Cache", PersistentCache);
 
 // configure AJAX to always ask for json
 // You can ask for a new instance do get rid of this behaviour :)
-App.ServicesContainer.get("AJAX").onStart(function (req) {
-    "use strict";
-
-    req.set("Accept", "application/ajax");
-});
-
-// Example
-App.ServicesContainer.define("User", User);
-App.ServicesContainer.define("Movies", Movies);
+App.ServicesContainer.get("AJAX").onStart(req => req.set("Accept", "application/json"));

@@ -26,10 +26,10 @@ let loaders = [{
     use: {
         loader: "babel-loader",
         options: {
-            "presets": [
+            presets: [
                 ["env", {
-                    "targets": {
-                        "browsers": ["last 2 versions"]
+                    targets: {
+                        browsers: ["last 2 versions"]
                     }
                 }],
                 "react"
@@ -71,11 +71,12 @@ if (PROD) {
     });
 } else {
     loaders[1].use = ["style-loader", "css-loader", "sass-loader"];
-    loaders[0].query.presets.push("react-hmre");
+    loaders[0].use.options.presets.push("react-hmre");
 
     plugins.push(
         new webpack.SourceMapDevToolPlugin({
-            lineToLine: true
+            lineToLine: true,
+            filename: '[name].js.map'
         })
     );
 
@@ -90,7 +91,7 @@ let config = {
         disableHostCheck: true,
         host: "0.0.0.0"
     },
-    // devtool: "#inline-source-map",
+    // devtool: "#cheap-module-eval-source-map",
     output: {
         path: getPath("web/js"),
         filename: "bundle.js",

@@ -1,11 +1,9 @@
 import Config from "./core/Config";
-import env from "env";
 
 const ConfigInstance = new Config();
-
-for (let config in env) {
-    if (env.hasOwnProperty(config)) {
-        ConfigInstance.set(config, env[config]);
+for (const config in APP_CONFIG) {
+    if (APP_CONFIG.hasOwnProperty(config)) {
+        ConfigInstance.set(config, APP_CONFIG[config]);
     }
 }
 

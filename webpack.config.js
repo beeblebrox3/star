@@ -4,21 +4,50 @@ const fs = require("fs");
 const webpack = require("webpack");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const MinifyPlugin = require("babel-minify-webpack-plugin");
-
-const environment = process.env.NODE_ENV;
-const PROD = environment === "production";
-
-const defaultEnvFile = ".env.js";
-let envFile = path.resolve(__dirname, `.env.${environment}.js`);
-if (!fs.existsSync(envFile)) {
-    envFile = path.resolve(__dirname, defaultEnvFile);
-}
+const log4js = require("log4js");
+const logger = log4js.getLogger();
+logger.level = "debug";
 
 const getPath = function () {
     return path.join(__dirname, ...arguments);
 };
 
-let plugins = [];
+/******************************************************************************/
+/* ENVIRONMENT VARIABLES                                                      */
+/******************************************************************************/
+
+const environment = process.env.NODE_ENV;
+const PROD = environment === "production";
+
+const appConfig = (function () {
+    const defaultEnvFile = ".env.js";
+    const exampleEnvFile = getPath(".env.example.js");
+    let envFile = getPath(`.env.${environment}.js`);
+    if (!fs.existsSync(envFile)) {
+        logger.info(`Enviroment file not found for ${environment}`);
+        envFile = getPath(defaultEnvFile);
+    }
+
+    if (!fs.existsSync(envFile)) {
+        logger.warn(`Enviroment file not found for ${environment}`);
+
+        if (!fs.existsSync(exampleEnvFile)) {
+            throw Error("No environment file found neither example file.");
+        }
+
+        envFile = exampleEnvFile;
+    }
+
+    const envConfigs = require(envFile);
+    return Object.keys(envConfigs).reduce((configs, config) => {
+        configs[config] = process.env[config] || envConfigs[config];
+        return configs;
+    }, {environment: environment});
+}());
+
+let plugins = [
+    new webpack.DefinePlugin({APP_CONFIG: JSON.stringify(appConfig)})
+];
 
 let loaders = [{
     test: /\.jsx?$/,
@@ -104,7 +133,6 @@ let config = {
     },
     resolve: {
         alias: {
-            env: envFile,
             app: getPath("src/js/app.js")
         }
     },

@@ -35,6 +35,12 @@ yarn dev
 yarn prod
 ```
 
+You can also start your own project with star without clone this repo:
+```shell
+curl https://gist.githubusercontent.com/beeblebrox3/a43f83be69572bcfff154134c503248a/raw/138156b1b56e0ddbc71d1f0a6fb2b49b97ee1c3b/create_star_project.sh | bash -s <your project name>
+```
+This will download star to an folder with the name of your project.
+
 ## How the code is organized
 ### Namespaces
 A good design principle is maintain a single global variable, so we have `App`.
@@ -44,8 +50,8 @@ We have something like:
 ```javascript
 // /index.js
 const App = {
-	helpers: {}, // for your app custom helpers
-	libs: {}, // for 3rd party libs, like React
+	helpers:    {}, // for your app custom helpers
+	libs:       {}, // for 3rd party libs, like React
 	components: {}, // for all your react components
 };
 ```
@@ -180,7 +186,23 @@ Finally, in the fourth line we have "some value" as returned value, because we s
 This module is available on all components, libs, services etc, because is defined in the first lines of bootstrap.js file.
 The  default configuration values can be set on the `config.js` file on root folder.
 
-On `src/js/config.js` the framework will scan the  `/.env.js` file and set every config on that file in the `App.Config` instance. You can create additional configs, if you want.
+Star have a special file to put environment configs. On the root folder, you can see that we have a `.env.example.js`. You can copy this file as `.env.js` to use it and change/add configurations as you need.
+
+You can have multiple env files to represent different environments where the app will run. Star will search for `.env.<environment name>.js` (ie: `.env.dev.js` or `.env.production.js`). You specify the environment on `NODE_ENV` :
+
+```shell
+env NODE_ENV=production yarn build // will search for .env.production.js or fallback to .env.js
+```
+
+You can override the values from the envfile too:
+
+```shell
+env CUSTOM_CONFIG=value yarn build
+```
+
+> Tip: You only can override configs that are present on `.env.js`.
+
+On the build process, webpack will create an global variable named `APP_CONFIG`. The `config.js` file will put those configs on the Config instance.
 
 ### EventManager
 This module, like the name suggests, allows you to fire and observe application's events. Let's see:
@@ -389,7 +411,3 @@ In this case, we use the `Users` service to fetch use data (from the backend, fo
 
 > Remember: this is still a work in progress.
 
-
---------
-
-> Written with [StackEdit](https://stackedit.io/).

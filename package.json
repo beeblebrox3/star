@@ -30,6 +30,7 @@
     "jsdoc": "^3.5.5",
     "less": "^2.7.2",
     "less-loader": "^4.0.5",
+    "log4js": "^2.3.3",
     "mockdate": "^2.0.2",
     "node-sass": "^4.5.3",
     "normalize.css": "^7.0.0",
@@ -43,7 +44,8 @@
   "scripts": {
     "test": "jest --config .jest-config.json",
     "test-watch": "jest --config .jest-config.json --watch",
-    "dev": "env NODE_ENV=dev ./node_modules/.bin/webpack-dev-server -d --content-base web/ --history-api-fallback",
+    "dev": "./node_modules/.bin/webpack-dev-server -d --content-base web/ --history-api-fallback",
+    "build": "./node_modules/.bin/webpack --progress --color",
     "prod": "env NODE_ENV=production ./node_modules/.bin/webpack --progress --color"
   }
 }

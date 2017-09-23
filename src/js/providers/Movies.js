@@ -14,8 +14,8 @@ function Movies() {
  */
 Movies.prototype.makePayload = function (complement = {}) {
     return Object.assign({
-        api_key: App.config("tmdb_api_key"),
-        language: App.config("language")
+        api_key: App.config("TMDB_API_KEY"),
+        language: App.config("LANGUAGE")
     }, complement);
 }
 

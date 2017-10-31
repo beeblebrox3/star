@@ -44,7 +44,7 @@ const RouterEngine = function (DOMNode, Page) {
 
     const renderPage = function (Page, context) {
         RDOM.render(
-            <Page { ...context.params } { ...context.query } context={ context }/>,
+            <Page { ...context.params } queryString={ context.query || {} } context={ context }/>,
             DOMNode
         );
     };
@@ -52,7 +52,7 @@ const RouterEngine = function (DOMNode, Page) {
     const renderPageWithLayout = function (Layout, Page, context) {
         RDOM.render(
             <Layout>
-                <Page { ...context.params } { ...context.query } context={ context }/>
+                <Page { ...context.params } queryString={ context.query || {} } context={ context }/>
             </Layout>,
             DOMNode
         );
@@ -135,6 +135,10 @@ const RouterEngine = function (DOMNode, Page) {
                 click: true,
                 hashbang: false
             });
+        },
+
+        current() {
+            return Page.current;
         }
     }
 };

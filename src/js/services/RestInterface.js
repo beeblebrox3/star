@@ -5,10 +5,12 @@ class RestInterface {
     /**
      * @param {String} serviceName   name of the service (used to emmit events)
      * @param {String} basepath
+     * @todo add cache config
      */
-    constructor(serviceName, basepath) {
+    constructor(serviceName, basepath, idField = "id") {
         this.serviceName = serviceName;
         this.basepath = basepath;
+        this.idField = idField;
 
         this.Request = App.ServicesContainer.get("AJAX");
         this.EM = App.EventManager;
@@ -19,63 +21,66 @@ class RestInterface {
     /**
      * Get all itens
      * @method index
-     * @param  {Object} data      querystring
-     * @param  {Function} onSuccess
-     * @param  {Function} onError
-     * @return {null}
+     * @param  {Object} data querystring
+     * @return {Promise}
      */
-    index(data, onSuccess, onError) {
-        this.Request.send("get", this.basepath, data, onSuccess, onError);
+    index(data) {
+        return new Promise((resolve, reject) => {
+            this.Request.send("get", this.basepath, data, (res) => {
+                resolve(res.body);
+            }, (err, res) => {
+                reject(err, res);
+            });
+        });
     }
 
     /**
      * Fetch single item
      * @param {String|Number} id
-     * @param {Function}      onSuccess
-     * @param {Function}      onError
+     * @return {Promise}
      */
-    show(id, onSuccess, onError) {
-        this.Request.send("get", this.basepath + "/" + id, {}, onSuccess, onError);
+    show(id) {
+        return new Promise((resolve, reject) => {
+            this.Request.send("get", `${this.basepath}/${id}`, {}, (res) => {
+                resolve(res.body);
+            }, (err, res) => {
+                reject({err, res});
+            });
+        });
     }
 
     /**
      * Create a new item
      * @param {Object}   data
-     * @param {Function} onSuccess
-     * @param {Function} onError
+     * @return {Promise}
      */
-    store(data, onSuccess, onError) {
-        this.Request.send(
-            "post",
-            this.basepath,
-            data,
-            (res, req) => {
-                this.EM.notify(this.serviceName + ".create", res, req);
-
-                if (typeof onSuccess === "function") {
-                    onSuccess(res, req);
+    store(data) {
+        return new Promise((resolve, reject) => {
+            this.Request.send(
+                "post",
+                this.basepath,
+                data,
+                (res, req) => {
+                    this.EM.notify(this.serviceName + ".create", res, req);
+                    resolve(res.body);
+                },
+                (err, res, req) => {
+                    this.EM.notify(this.serviceName + ".create.error", err, res, req);
+                    reject({err, res, req});
                 }
-            },
-            (err, res, req) => {
-                this.EM.notify(this.serviceName + ".create.error", err, res, req);
-
-                if (typeof onError === "function") {
-                    onError(err, res, req);
-                }
-            }
-        );
+            );
+        });
     }
 
     /**
      * @param {Object}   data
-     * @param {Function} onSuccess
-     * @param {Function} onError
+     * @return {Promise}
      */
-    update(data, onSuccess, onError) {
+    update(data) {
         let id = null;
 
-        if (data.hasOwnProperty("id")) {
-            id = data.id;
+        if (data.hasOwnProperty(this.idField)) {
+            id = data[this.idField];
         } else {
             id = this._extractId(data);
         }
@@ -83,36 +88,32 @@ class RestInterface {
         let payload = data;
         payload._method = "PUT";
 
-        this.Request.send(
-            "post",
-            this.basepath + "/" + id,
-            payload,
-            (res, req) => {
-                this.EM.notify(this.serviceName + ".update", res, req);
 
-                if (typeof onSuccess === "function") {
-                    onSuccess(res, req);
+        return new Promise((resolve, reject) => {
+            this.Request.send(
+                "post",
+                this.basepath + "/" + id,
+                payload,
+                (res, req) => {
+                    this.EM.notify(this.serviceName + ".update", res, req);
+                    resolve(res.body);
+                },
+                (err, res, req) => {
+                    this.EM.notify(this.serviceName + ".update.error", err, res, req);
+                    reject({err, res, req});
                 }
-            },
-            (err, res, req) => {
-                this.EM.notify(this.serviceName + ".update.error", err, res, req);
-
-                if (typeof onError === "function") {
-                    onError(err, res, req);
-                }
-            }
-        );
+            );
+        });
     }
 
     /**
      * @param {Object}   data
-     * @param {Function} onSuccess
-     * @param {Function} onError
+     * @return {Promise}
      */
-    destroy(data, onSuccess, onError) {
+    destroy(data) {
         let id = null;
-        if (data.hasOwnProperty("id")) {
-            id = data.id;
+        if (data.hasOwnProperty(this.idField)) {
+            id = data[this.idField];
         } else {
             id = this._extractId(data);
         }
@@ -120,25 +121,21 @@ class RestInterface {
         let payload = data;
         payload._method = "DELETE";
 
-        this.Request.send(
-            "post",
-            this.basepath + "/" + id,
-            payload,
-            (res, req) => {
-                this.EM.notify(this.serviceName + ".destroy", res, req);
-
-                if (typeof onSuccess === "function") {
-                    onSuccess(res, req);
+        return new Promise((resolve, reject) => {
+            this.Request.send(
+                "post",
+                this.basepath + "/" + id,
+                payload,
+                (res, req) => {
+                    this.EM.notify(this.serviceName + ".destroy", res, req);
+                    resolve(res);
+                },
+                (err, res, req) => {
+                    this.EM.notify(this.serviceName + ".destroy.error", err, res, req);
+                    reject({err, res, req});
                 }
-            },
-            (err, res, req) => {
-                this.EM.notify(this.serviceName + ".destroy.error", err, res, req);
-
-                if (typeof onError === "function") {
-                    onError(err, res, req);
-                }
-            }
-        );
+            );
+        });
     }
 }
 

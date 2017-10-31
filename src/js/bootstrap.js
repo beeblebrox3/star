@@ -30,11 +30,17 @@ App.Config = Config;
 
 App.ServicesContainer = new ServicesContainer();
 App.ServicesContainer.define("EventManager", EventManager);
+
 // shortcuts
 App.service = (service) => App.ServicesContainer.get(service);
 App.provider = (service) => App.ServicesContainer.get(service);
 App.config = (config, defaultValue = null) => App.Config.get(config, defaultValue);
 App.EventManager = App.ServicesContainer.get("EventManager");
+
+// @todo move
+if (App.config("debug")) {
+    App.EventManager.enableDebug();
+}
 
 require("./helpers/index");
 require("./services/index");

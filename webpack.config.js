@@ -63,6 +63,10 @@ let loaders = [{
                 }],
                 "react"
             ],
+            plugins: [
+                "transform-object-rest-spread",
+                "transform-class-properties"
+            ]
         }
     }
 }, {
@@ -101,13 +105,6 @@ if (PROD) {
 } else {
     loaders[1].use = ["style-loader", "css-loader", "sass-loader"];
     loaders[0].use.options.presets.push("react-hmre");
-
-    plugins.push(
-        new webpack.SourceMapDevToolPlugin({
-            lineToLine: true,
-            filename: '[name].js.map'
-        })
-    );
 
     plugins.push(new webpack.HotModuleReplacementPlugin());
 }

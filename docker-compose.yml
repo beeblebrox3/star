@@ -7,9 +7,10 @@ services:
         command: bash -c "cd /app ; npm install ; npm rebuild node-sass ; npm run prod"
         container_name: star-build
     web:
-        image: httpd:alpine
+        image: nginx:alpine
         container_name: star-web
         volumes:
-            - ./web:/usr/local/apache2/htdocs
+            - ./web:/app
+            - ./nginx.conf:/etc/nginx/conf.d/app.conf
         ports:
-            - 9866:80
+            - 80:80

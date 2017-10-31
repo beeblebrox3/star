@@ -4,5 +4,14 @@
         "include": [
             "react"
         ]
+    },
+    "exclude": [
+        "./web"
+    ],
+    "compilerOptions": {
+        "baseUrl": "src/js",
+        "module": "commonjs",
+        "allowSyntheticDefaultImports": true,
+        "target": "es6"
     }
 }

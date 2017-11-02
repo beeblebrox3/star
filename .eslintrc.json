@@ -6,23 +6,25 @@
         "es6": true,
         "node": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaFeatures": {
+            "classes": true,
             "jsx": true
         },
         "sourceType": "module",
-        "ecmaVersion": 8
+        "ecmaVersion": 2017
     },
     "globals": {
         "require": true
     },
     "rules": {
+        "strict": 0,
         "no-underscore-dangle": "warn",
         "no-alert": "error",
         "camelcase": "warn",
         "eqeqeq": "warn",
-
-        "react/display-name": "error"
+        "react/display-name": "off"
     },
     "plugins": [
         "react"

@@ -4,8 +4,18 @@
  * @class EventManager
  */
 class EventManager {
+    debug = false;
+
     constructor() {
         this._map = {};
+    }
+
+    enableDebug() {
+        this.debug = true;
+    }
+
+    disableDebug() {
+        this.debug = false;
     }
 
     /**
@@ -26,8 +36,6 @@ class EventManager {
             throw "eventName cannot be empty";
         }
 
-        console.log(this);
-
         if (!this._map.hasOwnProperty(eventName)) {
             this._map[eventName] = [];
         }
@@ -41,7 +49,7 @@ class EventManager {
      * Add an event listener to multiple event aht the sabe time
      *
      * @param {String[]} eventNames Event's names
-     * @param {any} fn Handler
+     * @param {Function} fn Handler
      * @return {Function[]} Unsubscribers for all events
      * @see EventManager.subscribe
      *
@@ -121,7 +129,8 @@ class EventManager {
      * @memberOf EventManager
      */
     notify(eventName) {
-        console.log(eventName);
+        this.debug && console.log(eventName);
+
         if (!this._map.hasOwnProperty(eventName)) {
             return;
         }

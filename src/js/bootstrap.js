@@ -2,7 +2,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-import debounce from "debounce";
 import Superagent from "superagent";
 import Page from "page";
 import qs from "qs";
@@ -19,7 +18,6 @@ import Config from "./config";
 // Register
 App.libs.React = React;
 App.libs.ReactDOM = ReactDOM;
-App.libs.debounce = debounce;
 App.libs.Superagent = Superagent;
 App.libs.Page = Page;
 App.libs.qs = qs;

@@ -47,16 +47,9 @@ class MoviesPage extends React.Component {
         });
     }
 
-    handleSearch = () => {
+    handleSubmit = (e) => {
+        e.preventDefault();
         App.service("ROUTER").setRoute(this.getUrl(null, this.inputSearch.value));
-    }
-
-    getSearchValue = () => {
-        if (this.inputSearch && this.inputSearch.value) {
-            return this.inputSearch.value;
-        }
-
-        return "";
     }
 
     getUrl = (page, q) => {
@@ -89,14 +82,13 @@ class MoviesPage extends React.Component {
                 <h1>Search for movies and tv shows</h1>
                 <p>All data provided by <a href="https://www.themoviedb.org/">The Movie DB</a>.</p>
 
-                <form className="search-bar" method="get">
+                <form className="search-bar" method="get" onSubmit={ this.handleSubmit }>
                     <input type="search"
                         name="q"
                         placeholder="search..."
-                        onChange={ App.libs.debounce(this.handleSearch, 500) }
-                        ref={ (elem) => { this.inputSearch = elem }}
                         defaultValue={ this.props.queryString.q }
                         autoFocus
+                        ref={ elem => this.inputSearch = elem }
                     />
                 </form>
 

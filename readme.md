@@ -4,7 +4,11 @@
 [![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/master)
 
+
+
 > [Demo](https://star.luque.cc/)
+
+![Star Logo](resources/logo.png)
 
 ## About
 This project is just a place for me to think about how  organize my front-end code. I'm not suggesting you to use, but you can - and I hope you do - ask questions or make suggestions ;)
@@ -236,7 +240,7 @@ App.EventManager.notify("eventA", "parameter1", "parameter2");
 
 You can define as many handlers you want for each event.
 
-**Tip**: the subscrive method returns an function that do the unsubscribe. Sou you can for instance: 
+**Tip**: the subscrive method returns an function that do the unsubscribe. Sou you can for instance:
 ```js
 const dispose = App.EventManager("EventX", () => console.log("x"));
 

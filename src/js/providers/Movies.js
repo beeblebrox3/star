@@ -29,7 +29,11 @@ Movies.prototype.search = function (term, page = 1) {
         this.Request.send('get', this.basepath + "search/multi", payload, (res) =>{
             resolve(res.body.results);
         }, (err) => {
-            reject(err);
+            const errMessage = err.status && err.status == 401 ?
+                "You're not authorized to access this resource. You should verify the TMDB_API_KEY config on '.env.js' file." :
+                err.message;
+
+            reject(errMessage);
         });
     });
 }

@@ -9,7 +9,7 @@ class MoviesPage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {results: [], searching: false};
+        this.state = {results: [], searching: false, error: ""};
     }
 
     componentDidMount() {
@@ -39,11 +39,12 @@ class MoviesPage extends React.Component {
             return;
         }
 
-        this.setState({searching: true, results: []}, () => {
+        this.setState({searching: true, results: [], error: ""}, () => {
             MoviesProvider.search(opts.q, opts.page)
                 .then(results => {
                     this.setState({results: results, searching: false})
                 })
+                .catch(error => this.setState({error: error, loading: false}))
         });
     }
 
@@ -76,6 +77,8 @@ class MoviesPage extends React.Component {
         }
     }
 
+    changeFoo = (e) => this.setState({foo: e.target.value})
+
     render() {
         return (
             <div className="container movies">
@@ -87,10 +90,14 @@ class MoviesPage extends React.Component {
                         name="q"
                         placeholder="search..."
                         defaultValue={ this.props.queryString.q }
+                        value={ this.state.foo }
+                        onChange={ this.changeFoo }
                         autoFocus
                         ref={ elem => this.inputSearch = elem }
                     />
                 </form>
+
+                <center>{ this.state.foo }</center>
 
                 { this.renderResults() }
             </div>

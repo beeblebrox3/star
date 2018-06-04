@@ -3,6 +3,7 @@
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
 [![Code Coverage](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/beeblebrox3/star/badges/build.png?b=master)](https://scrutinizer-ci.com/g/beeblebrox3/star/build-status/master)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbeeblebrox3%2Fstar.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbeeblebrox3%2Fstar?ref=badge_shield)
 
 
 
@@ -415,3 +416,7 @@ In this case, we use the `Users` service to fetch use data (from the backend, fo
 
 > Remember: this is still a work in progress.
 
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fbeeblebrox3%2Fstar.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fbeeblebrox3%2Fstar?ref=badge_large)
